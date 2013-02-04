@@ -1,0 +1,31 @@
+
+public class Stage {
+	private String name;
+	private int visitorsMax;
+	private boolean isMainStage;
+	
+	public Stage(String name, int visitorsMax, boolean isMainStage) {
+		this.name = name;
+		this.visitorsMax = visitorsMax;
+		this.isMainStage = isMainStage;
+	}
+	
+	public Stage(){
+		
+	}
+	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getVisitorsMax() {
+		return visitorsMax;
+	}
+	public void setVisitorsMax(int visitorsMax) {
+		this.visitorsMax = visitorsMax;
+	}
+	
+	
+}

@@ -1,0 +1,54 @@
+import java.util.*;
+
+public class Performance {
+	private ArrayList<Artist> artists;
+	private Stage stage;
+	private float startTime;
+	private float endTime;
+	private int popularity;
+	
+	public Performance(float startTime, float endTime, int popularity, Stage stage) throws ArithmeticException {
+		if(startTime < endTime)
+			throw new ArithmeticException("Ending time must be greater than starting time");
+		this.startTime = startTime;
+		this.endTime = endTime;
+		this.popularity = popularity;
+		this.Stage = stage;
+		artists = new ArrayList<Artist>();
+	}
+	
+	public ArrayList<Artist> getArtists() {
+		return artists;
+	}
+	public void addArtists(Artist artist) {
+		artists.add(artist);
+	}
+	
+	public Stage getStage() {
+		return stage;
+	}
+	public void setStage(Stage stage) {
+		this.stage = stage;
+	}
+	
+	public float[] getTime(){
+		float[] time = new float[1];
+		time[0] = startTime;
+		time[1] = endTime;
+		return time;
+	}
+	public void setTime(float startTime, float endTime) {
+		this.startTime = startTime;
+		this.endTime = endTime;
+	}
+	
+	
+	public int getPopularity() {
+		return popularity;
+	}
+	public void setPopularity(int popularity) {
+		this.popularity = popularity;
+	}
+	
+	
+}

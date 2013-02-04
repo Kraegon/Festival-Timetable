@@ -1,0 +1,34 @@
+import java.io.Serializable;
+import java.util.*;
+
+public class Festival implements Serializable{
+	private LinkedList<Stage> stages;
+	private LinkedList<Artist> artists;
+	private LinkedList<Performance> performances;
+	
+	public Festival(){
+		stages = new LinkedList<Stage>();
+		artists = new LinkedList<Artist>();
+		performances = new LinkedList<Performance>();
+	}
+	
+	public void addStage(Stage stage){
+		stages.add(stage);
+	}
+	public void addArtist(Artist artist){
+		artists.add(artist);
+	}
+	public void addPerformance(Performance performance){
+		performances.add(performance);
+	}
+	
+	public LinkedList<Stage> getStages() {
+		return stages;
+	}
+	public LinkedList<Artist> getArtists() {
+		return artists;
+	}
+	public LinkedList<Performance> getPerformances() {
+		return performances;
+	}	
+}
