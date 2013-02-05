@@ -18,7 +18,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	    {
 	        super("FestivalPlanner");
 	        makeFrame();
-	        io = new IO("default.fest");
+	        io = new IO();
 	    }
 	    
 	    private void makeFrame()
@@ -110,7 +110,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	            {
 	                public void actionPerformed(ActionEvent e) 
 	                { 
-	                    io.setNewFestival();
+	                    io.setNewFestival("default.fest");
 	                }
 	            });
 	        fileMenu.add(newMenu);

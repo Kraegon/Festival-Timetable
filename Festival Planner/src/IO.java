@@ -22,7 +22,8 @@ public class IO {
 	public Festival getFestival() {
 		return festival;
 	}
-	public void setNewFestival(){
+	public void setNewFestival(String filePath){
+		this.filePath = filePath;
 		festival = new Festival();
 	}
 	public void setFestival(Festival festival) {
@@ -76,6 +77,7 @@ public class IO {
 	}
 	
 	public void printFestival(){
+		System.out.println("Festival: " + filePath);
 		if(festival != null)
 			System.out.print(festival.toString());
 		else

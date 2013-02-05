@@ -61,16 +61,24 @@ public class Festival implements Serializable{
 	
 	public String toString(){
 		String str = "";
-		
-		for(Stage s : stages){
-			str += s.toString();
-		}
-		for(Artist a : artists){
-			str += a.toString();
-		}
-		for(Performance p : performances){
-			str += p.toString();
-		}
+		if(stages.isEmpty())
+			str += "\n No stages made.";
+		else
+			for(Stage s : stages){
+				str += s.toString();
+			}
+		if(artists.isEmpty())
+			str += "\n No artists made.";
+		else
+			for(Artist a : artists){
+				str += a.toString();
+			}
+		if(performances.isEmpty())
+			str += "\n No performances made.";
+		else
+			for(Performance p : performances){
+				str += p.toString();
+			}
 		
 		return str;
 	}
