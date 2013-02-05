@@ -33,11 +33,7 @@ public class Festival implements Serializable{
 	public void addArtist(Artist artist){
 		artists.add(artist);
 	}
-	public void addPerformance(Performance performance) throws IllegalArgumentException{
-		if(stages.isEmpty())
-			throw new IllegalArgumentException("No stages created");
-		if(artists.isEmpty())
-			throw new IllegalArgumentException("No artists created");
+	public void addPerformance(Performance performance){
 		performances.add(performance);
 	}
 	
