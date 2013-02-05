@@ -3,6 +3,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.border.*;
 //TEST LESLEY
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 	public class GUI extends JFrame
 	{
@@ -11,16 +12,13 @@ import javax.swing.border.*;
 		JButton center;
 	    JLabel statusLabel;
 	    private String status = "This panel will show you useful messages";
-	    
-	    public static void main(String[] args)
-	    {
-	        new GUI();
-	    }
+	    IO io;
 	    
 	    public GUI()
 	    {
 	        super("FestivalPlanner");
 	        makeFrame();
+	        io = new IO("default.fest");
 	    }
 	    
 	    private void makeFrame()
@@ -78,6 +76,7 @@ import javax.swing.border.*;
             {
                 public void actionPerformed(ActionEvent e) 
                 { 
+                	io.printFestival();
                     statusLabel.setText("This is where the agenda will be.");
                 }
             });
@@ -106,15 +105,63 @@ import javax.swing.border.*;
 	        menuBar.add(infoMenu);
 	        
 	        /** JMenuItem **/
+	        JMenuItem newMenu = new JMenuItem("New");
+	        newMenu.addActionListener(new ActionListener() 
+	            {
+	                public void actionPerformed(ActionEvent e) 
+	                { 
+	                    io.setNewFestival();
+	                }
+	            });
+	        fileMenu.add(newMenu);
+	        
+	        fileMenu.addSeparator();
+	        
 	        JMenuItem saveMenu = new JMenuItem("Save");
 	        saveMenu.addActionListener(new ActionListener() 
 	            {
 	                public void actionPerformed(ActionEvent e) 
 	                { 
-	                    save();
+	                    io.saveFestival();
 	                }
 	            });
 	        fileMenu.add(saveMenu);
+	        
+	        JMenuItem saveAsMenu = new JMenuItem("Save as...");
+	        saveAsMenu.addActionListener(new ActionListener() 
+	            {
+	                public void actionPerformed(ActionEvent e) 
+	                { 
+	                	JFileChooser choose = new JFileChooser();
+	                	//choose.setFileFilter(new FileNameExtensionFilter("fest"));  BROKEN
+	                	choose.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+	                	int choice = choose.showSaveDialog(getContentPane());
+	                	if(choice == JFileChooser.APPROVE_OPTION) {
+	                		io.setFilePath(choose.getSelectedFile().getName());
+	                		io.saveFestival();
+	                	}
+	                }
+	            });
+	        fileMenu.add(saveAsMenu);
+	        
+	        fileMenu.addSeparator();
+	        
+	        JMenuItem openMenu = new JMenuItem("Open");
+	        openMenu.addActionListener(new ActionListener() 
+	            {
+	                public void actionPerformed(ActionEvent e) 
+	                {
+	                	JFileChooser choose = new JFileChooser();
+	                	//choose.setFileFilter(new FileNameExtensionFilter("fest"));  BROKEN
+	                	choose.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+	                	int choice = choose.showOpenDialog(getContentPane());
+	                	if(choice == JFileChooser.APPROVE_OPTION) {
+	                		io.setFilePath(choose.getSelectedFile().getName());
+	                		io.openFestival();
+	                	}
+	                }
+	            });
+	        fileMenu.add(openMenu);	           
 	        
 	        JMenuItem simulatorItem = new JMenuItem("Execute");
 	        simulatorItem.addActionListener(new ActionListener() 
@@ -163,11 +210,6 @@ import javax.swing.border.*;
 	    private String getStatus()
 	    {
 	        return status;
-	    }
-	    
-	    private void save()
-	    {
-	    	statusLabel.setText("save();");
 	    }
 	    
 	    private void executeSimulator()

@@ -22,6 +22,9 @@ public class IO {
 	public Festival getFestival() {
 		return festival;
 	}
+	public void setNewFestival(){
+		festival = new Festival();
+	}
 	public void setFestival(Festival festival) {
 		this.festival = festival;
 	}
@@ -73,6 +76,9 @@ public class IO {
 	}
 	
 	public void printFestival(){
-		System.out.print(festival.toString());
+		if(festival != null)
+			System.out.print(festival.toString());
+		else
+			System.out.println("No current festival");
 	}
 }

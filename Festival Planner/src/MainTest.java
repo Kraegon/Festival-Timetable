@@ -32,7 +32,7 @@ public class MainTest {
 		f.addPerformance(theFirst);
 		f.addPerformance(theSecond);
 		
-		IO test = new IO("testival");		
+		IO test = new IO("testival.fest");		
 		
 		test.setFestival(f);
 		
