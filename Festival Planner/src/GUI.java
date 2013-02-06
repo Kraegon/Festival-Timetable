@@ -1,13 +1,16 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+
 import javax.swing.*;
 import javax.swing.border.*;
-//TEST LESLEY
+
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 	public class GUI extends JFrame
 	{
 		// Attributen
+		private JFrame inputFrame;
 		private static final long serialVersionUID = 1L;
 		JButton center;
 	    JLabel statusLabel;
@@ -27,6 +30,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	        setDefaultCloseOperation(EXIT_ON_CLOSE);
 	        JPanel contentPane = new JPanel(new BorderLayout(10, 10));
 	        contentPane.setBorder(new EmptyBorder(10, 10, 10, 10));
+	        setLocation(new Point(100, 100));
 
 	        /** Maak menuBar **/
 	        makeMenuBar();
@@ -122,7 +126,14 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	            {
 	                public void actionPerformed(ActionEvent e) 
 	                { 
-	                    io.saveFestival();
+	                	try{
+	                		io.saveFestival();
+	                		statusLabel.setText("Save success");
+	                	} catch (IOException exc){
+	                		statusLabel.setText("Saving failed");
+	                	} catch (NullPointerException exc) {
+	                		statusLabel.setText("No festival to save.");
+	                	}
 	                }
 	            });
 	        fileMenu.add(saveMenu);
@@ -138,7 +149,14 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	                	int choice = choose.showSaveDialog(getContentPane());
 	                	if(choice == JFileChooser.APPROVE_OPTION) {
 	                		io.setFilePath(choose.getSelectedFile().getName());
-	                		io.saveFestival();
+	                		try{
+		                		io.saveFestival();
+		                		statusLabel.setText("Save success");
+		                	} catch (IOException exc){
+		                		statusLabel.setText("Saving failed");
+		                	} catch (NullPointerException exc) {
+		                		statusLabel.setText("No festival to save.");
+		                	}
 	                	}
 	                }
 	            });
@@ -157,7 +175,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	                	int choice = choose.showOpenDialog(getContentPane());
 	                	if(choice == JFileChooser.APPROVE_OPTION) {
 	                		io.setFilePath(choose.getSelectedFile().getName());
-	                		io.openFestival();
+	                		try{
+	                			io.openFestival();
+	                			statusLabel.setText("Opening success");
+	                		} catch(IOException exc){
+	                			statusLabel.setText("Opening failed");
+	                			exc.printStackTrace();
+	                		}
 	                	}
 	                }
 	            });
@@ -189,16 +213,19 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	    
 	    private void addArtist()
 	    {
+	    	inputFrame = new InputFrame("artist", getLocation());
 	        statusLabel.setText("addArtist();");
 	    }
 	    
 	    private void addPerformance() 
 	    {
+	    	inputFrame = new InputFrame("performance", getLocation());
 	    	statusLabel.setText("addPerformance();");
 		}
 	    
 	    private void addStage()
 	    {
+	    	inputFrame = new InputFrame("stage", getLocation());
 	    	statusLabel.setText("addStage();");
 	    }
 	    

@@ -1,0 +1,47 @@
+import javax.swing.*;
+
+
+public class InputFrame extends JFrame{
+	JPanel artistPanel;
+	JPanel stagePanel;
+	JPanel performancePanel;
+	JPanel errorPanel;
+	
+	public InputFrame(String source){
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		
+		
+		errorPanel.add(new JLabel("Uh oh."));
+		
+		switch(source){
+		case "artist":
+			setContentPane(makeArtistPanel());
+			break;
+		case "stage":
+			setContentPane(makeStagePanel());
+			break;
+		case "performance":
+			setContentPane(makePerformancePanel());
+			break;
+		default:
+			setContentPane(errorPanel);
+		}
+		setSize(400,600);
+		setVisible(true);
+	}
+	
+	public JPanel makeArtistPanel(){
+		artistPanel.add(new JLabel("Is artist!"));
+		return artistPanel;
+	}
+	public JPanel makeStagePanel(){
+		stagePanel.add(new JLabel("Is stage!"));
+		return stagePanel;
+	}
+	public JPanel makePerformancePanel(){
+		performancePanel.add(new JLabel("Is performance!"));
+		return performancePanel;
+	}
+	
+
+}

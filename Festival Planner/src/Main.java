@@ -1,7 +1,7 @@
 /**
  * Small main
  * @author Julian G. West
- * @author Lesley van Hoek TEST
+ * @author Lesley van Hoek 
  */
 
 public class Main{

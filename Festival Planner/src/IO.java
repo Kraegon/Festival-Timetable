@@ -42,24 +42,20 @@ public class IO {
 		this.festiFile = festiFile;
 	}
 	
-	public void openFestival(){
+	public void openFestival() throws IOException{
 		ObjectInputStream objIn;
 		try{
 			objIn = new ObjectInputStream(new FileInputStream(filePath));
 			setFestival((Festival) objIn.readObject());
 			objIn.close();
-		} catch(IOException e){
-			System.out.println("Failed to open");
-			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			System.out.println("Class not found");
 			e.printStackTrace();
 		}
 	}
 	
-	public void saveFestival(){
+	public void saveFestival() throws IOException, NullPointerException{
 		ObjectOutputStream objOut;
-		try{
 			if(festiFile.exists()){
 				objOut = new ObjectOutputStream(new FileOutputStream(filePath));
 				objOut.writeObject(festival);
@@ -70,10 +66,7 @@ public class IO {
 				objOut.writeObject(festival);
 				objOut.close();
 			}
-		} catch(IOException e){
-			System.out.println("Failed to save");
-			e.printStackTrace();
-		}
+
 	}
 	
 	public void printFestival(){
