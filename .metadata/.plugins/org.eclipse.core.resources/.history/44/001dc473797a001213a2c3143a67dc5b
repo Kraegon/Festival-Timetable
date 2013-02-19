@@ -148,8 +148,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	                		statusLabel.setText("Save success");
 	                	} catch (IOException exc){
 	                		statusLabel.setText("Saving failed");
-	                	} catch (NullPointerException exc) {
-	                		statusLabel.setText("No festival set");
 	                	}
 	                }
 	            });
@@ -171,8 +169,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 		                		statusLabel.setText("Save successful");
 		                	} catch (IOException exc){
 		                		statusLabel.setText("Saving failed");
-		                	} catch (NullPointerException exc) {
-		                		statusLabel.setText("No festival set");
 		                	}
 	                	}
 	                }

@@ -60,7 +60,7 @@ public class IO {
 		}
 	}
 	
-	public void saveFestival() throws IOException, NullPointerException{
+	public void saveFestival() throws IOException{
 		ObjectOutputStream objOut;
 				if(festiFile.exists()){
 					objOut = new ObjectOutputStream(new FileOutputStream(filePath));
