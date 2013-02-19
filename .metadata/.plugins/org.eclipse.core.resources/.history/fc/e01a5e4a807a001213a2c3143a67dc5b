@@ -22,6 +22,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	        super("FestivalPlanner"); // Todo: Add festivalnaam aan schermnaam
 	        makeFrame();
 	        io = new IO();
+	        setTitle("FestivalPlanner" + io.getFilePath());
 	    }
 	    
 	    private void makeFrame()
@@ -132,7 +133,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	                public void actionPerformed(ActionEvent e) 
 	                { 
 	                    io.setNewFestival("default.fest");
-	                    setTitle("FestivalPlanner - " + io.getFilePath());
 	                }
 	            });
 	        fileMenu.add(newMenu);
@@ -170,7 +170,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	                		try{
 		                		io.saveFestival();
 		                		statusLabel.setText("Save successful");
-		                		setTitle("FestivalPlanner - " + io.getFestiFile().getName());
 		                	} catch (IOException exc){
 		                		statusLabel.setText("Saving failed");
 		                	} catch (NullPointerException exc) {
@@ -194,11 +193,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	                	int choice = choose.showOpenDialog(getContentPane());
 	                	if(choice == JFileChooser.APPROVE_OPTION) {
 	                		io.setFilePath(choose.getSelectedFile().getName());
-	                		io.setFestiFile(choose.getSelectedFile());
 	                		try{
 	                			io.openFestival();
 	                			statusLabel.setText("Opening successful");
-	                			setTitle("FestivalPlanner - " + io.getFestiFile().getName());
 	                		} catch(IOException exc){
 	                			statusLabel.setText("Opening failed");
 	                			exc.printStackTrace();
