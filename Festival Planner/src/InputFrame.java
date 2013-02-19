@@ -10,6 +10,7 @@ public class InputFrame extends JFrame{
 	JPanel artistPane;
 	JPanel stagePane;
 	JPanel performancePane;
+	JPanel festivalPane;
 	JPanel errorPane;
 	
 	public InputFrame(String source, Point sourcePoint){
@@ -50,7 +51,10 @@ public class InputFrame extends JFrame{
 		performancePane = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		performancePane.add(new JLabel("Is performance!"));
 		return performancePane;
-	}
-	
-
+	}	
+	public JPanel makeInputPane(){
+		performancePane = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		performancePane.add(new JLabel("Is input!"));
+		return performancePane;
+	}	
 }

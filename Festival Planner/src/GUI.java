@@ -19,7 +19,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	    
 	    public GUI()
 	    {
-	        super("FestivalPlanner");
+	        super("FestivalPlanner"); // Todo: Add festivalnaam aan schermnaam
 	        makeFrame();
 	        io = new IO();
 	    }
@@ -49,7 +49,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	            {
 	                public void actionPerformed(ActionEvent e) 
 	                { 
-	                    addArtist();
+	                	if(io.getFestival() == null){
+	                		statusLabel.setText("No festival set.");
+	                	} else {              	
+	                		addArtist();
+	                	}
+	                    
 	                }
 	            });
 	        
@@ -59,7 +64,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	            {
 	                public void actionPerformed(ActionEvent e) 
 	                { 
-	                    addPerformance();
+	                	if(io.getFestival() == null){
+	                		statusLabel.setText("No festival set.");
+	                	} else {              	
+	                		addPerformance();
+	                	}
 	                }
 	            });
 	        
@@ -69,7 +78,11 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	            {
 	                public void actionPerformed(ActionEvent e) 
 	                { 
-	                    addStage();
+	                	if(io.getFestival() == null){
+	                		statusLabel.setText("No festival set.");
+	                	} else {              	
+	                		addStage();
+	                	}
 	                }
 	            });
 	          
@@ -80,8 +93,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
             {
                 public void actionPerformed(ActionEvent e) 
                 { 
-                	io.printFestival();
-                    statusLabel.setText("This is where the agenda will be.");
+                	if(io.getFestival() == null){
+                		statusLabel.setText("No festival set.");
+                	} else {              	
+	                	io.printFestival();              	
+	                    statusLabel.setText("This is where the agenda will be.");
+                	}
                 }
             });
 	        
@@ -131,8 +148,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	                		statusLabel.setText("Save success");
 	                	} catch (IOException exc){
 	                		statusLabel.setText("Saving failed");
-	                	} catch (NullPointerException exc) {
-	                		statusLabel.setText("No festival to save.");
 	                	}
 	                }
 	            });
@@ -143,19 +158,17 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	            {
 	                public void actionPerformed(ActionEvent e) 
 	                { 
-	                	JFileChooser choose = new JFileChooser();
-	                	//choose.setFileFilter(new FileNameExtensionFilter("fest"));  BROKEN
+	                	JFileChooser choose = new JFileChooser();	                	
+	                	choose.setFileFilter(new FileNameExtensionFilter("Festival data files | .fest", "fest"));
 	                	choose.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 	                	int choice = choose.showSaveDialog(getContentPane());
-	                	if(choice == JFileChooser.APPROVE_OPTION) {
-	                		io.setFilePath(choose.getSelectedFile().getName());
+	                	if(choice == JFileChooser.APPROVE_OPTION){
+	                		io.setFilePath(choose.getSelectedFile() + ".fest");
 	                		try{
 		                		io.saveFestival();
-		                		statusLabel.setText("Save success");
+		                		statusLabel.setText("Save successful");
 		                	} catch (IOException exc){
 		                		statusLabel.setText("Saving failed");
-		                	} catch (NullPointerException exc) {
-		                		statusLabel.setText("No festival to save.");
 		                	}
 	                	}
 	                }
@@ -170,14 +183,14 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	                public void actionPerformed(ActionEvent e) 
 	                {
 	                	JFileChooser choose = new JFileChooser();
-	                	//choose.setFileFilter(new FileNameExtensionFilter("fest"));  BROKEN
+	                	choose.setFileFilter(new FileNameExtensionFilter("Festival data files | .fest", "fest"));
 	                	choose.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 	                	int choice = choose.showOpenDialog(getContentPane());
 	                	if(choice == JFileChooser.APPROVE_OPTION) {
 	                		io.setFilePath(choose.getSelectedFile().getName());
 	                		try{
 	                			io.openFestival();
-	                			statusLabel.setText("Opening success");
+	                			statusLabel.setText("Opening successful");
 	                		} catch(IOException exc){
 	                			statusLabel.setText("Opening failed");
 	                			exc.printStackTrace();

@@ -17,6 +17,11 @@ public class IO {
 	public IO(String filePath){
 		this.filePath = filePath;
 		festiFile = new File(filePath);
+		try {
+			festiFile.createNewFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public Festival getFestival() {
@@ -25,6 +30,7 @@ public class IO {
 	public void setNewFestival(String filePath){
 		this.filePath = filePath;
 		festival = new Festival();
+		festiFile = new File(filePath);
 	}
 	public void setFestival(Festival festival) {
 		this.festival = festival;
@@ -54,19 +60,18 @@ public class IO {
 		}
 	}
 	
-	public void saveFestival() throws IOException, NullPointerException{
+	public void saveFestival() throws IOException{
 		ObjectOutputStream objOut;
-			if(festiFile.exists()){
-				objOut = new ObjectOutputStream(new FileOutputStream(filePath));
-				objOut.writeObject(festival);
-				objOut.close();
-			} else {
-				festiFile.createNewFile();
-				objOut = new ObjectOutputStream(new FileOutputStream(filePath));
-				objOut.writeObject(festival);
-				objOut.close();
-			}
-
+				if(festiFile.exists()){
+					objOut = new ObjectOutputStream(new FileOutputStream(filePath));
+					objOut.writeObject(festival);
+					objOut.close();
+				} else {
+					festiFile.createNewFile();
+					objOut = new ObjectOutputStream(new FileOutputStream(filePath));
+					objOut.writeObject(festival);
+					objOut.close();
+				}
 	}
 	
 	public void printFestival(){
