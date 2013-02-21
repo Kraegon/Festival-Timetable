@@ -2,19 +2,22 @@ import java.awt.LayoutManager;
 import java.awt.Point;
 
 import javax.swing.*;
+
 import java.awt.*;
 
 
 public class InputFrame extends JFrame{
 
+	private static final long serialVersionUID = -1971482195672574230L;
 	JPanel artistPane;
 	JPanel stagePane;
 	JPanel performancePane;
 	JPanel festivalPane;
 	JPanel errorPane;
+	IO io;
 	
-	public InputFrame(String source, Point sourcePoint){
-		
+	public InputFrame(String source, Point sourcePoint, IO io){
+		this.io = io;
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);		
 		setLocation(new Point(sourcePoint.x + 150, sourcePoint.y + 150));
 		errorPane = new JPanel(null);
@@ -23,23 +26,49 @@ public class InputFrame extends JFrame{
 		switch(source){
 		case "artist":
 			setContentPane(makeArtistPane());
+			setTitle("Add artist");
 			break;
 		case "stage":
 			setContentPane(makeStagePane());
+			setTitle("Add stage");
 			break;
 		case "performance":
 			setContentPane(makePerformancePane());
+			setTitle("Add performance");
 			break;
 		default:
 			setContentPane(errorPane);
+			setTitle("Error");
+			break;
 		}
-		setSize(300,300);
+		setResizable(false);
 		setVisible(true);
 	}
 	
 	public JPanel makeArtistPane(){
-		artistPane = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		artistPane.add(new JLabel("Is artist!"));
+		//Creates itself and container
+		artistPane = new JPanel(new BorderLayout());
+		setPreferredSize(new Dimension(300,100));
+		JComponent[] comps = new JComponent[]{
+				new JLabel("Name: "),new JLabel ("Genre: "),new JLabel ("Misc: "),
+				new JTextField("name"),	new JTextField("genre"), new JTextField("misc")
+		};
+		JPanel leftPane = new JPanel(new GridLayout(3,1));
+		JPanel rightPane = new JPanel(new GridLayout(3,1));
+		//Aesthetics
+		bePretty();
+		//Add ingredients to the soup
+		for(JComponent component : comps){
+			if(component.getClass() == JLabel.class){
+				leftPane.add(component);
+			} else {
+				JTextField compTemp = (JTextField) component;
+				rightPane.add(component);
+			}
+		}
+		artistPane.add(leftPane, BorderLayout.WEST);
+		artistPane.add(rightPane, BorderLayout.CENTER);
+		//Finish
 		return artistPane;
 	}
 	public JPanel makeStagePane(){
@@ -56,5 +85,14 @@ public class InputFrame extends JFrame{
 		performancePane = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		performancePane.add(new JLabel("Is input!"));
 		return performancePane;
-	}	
+	}
+	public JPanel makeErrorPane(){
+		JPanel errorPane = new JPanel(new BorderLayout());
+		errorPane.add(new JLabel("Something has gone horribly wrong."), BorderLayout.CENTER);
+		return errorPane;
+	}
+	
+	public void bePretty(){
+		return;
+	}
 }

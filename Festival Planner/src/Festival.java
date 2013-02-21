@@ -12,7 +12,10 @@ public class Festival implements Serializable{
 	private LinkedList<Stage> stages;
 	private LinkedList<Artist> artists;
 	private LinkedList<Performance> performances;
-	private Date date;	
+	private String name;
+	private String date;	
+	private String startTime;
+	private String endTime;
 
 	public Festival(){
 		stages = new LinkedList<Stage>();
@@ -20,7 +23,7 @@ public class Festival implements Serializable{
 		performances = new LinkedList<Performance>();
 	}
 	
-	public Festival(Date date){
+	public Festival(String date){
 		stages = new LinkedList<Stage>();
 		artists = new LinkedList<Artist>();
 		performances = new LinkedList<Performance>();
@@ -51,16 +54,19 @@ public class Festival implements Serializable{
 		return performances;
 	}
 	
-	public Date getDate() {
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 	
 	public String toString(){
 		String str = "";
+		str += "Festival name: " + name;
+		str += "Date of festival " + date;
+		str += "Runs from " + startTime + " to " + endTime;
 		if(stages.isEmpty())
 			str += "No stages made. \n";
 		else
@@ -81,5 +87,29 @@ public class Festival implements Serializable{
 			}
 		
 		return str;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(String startTime) {
+		this.startTime = startTime;
+	}
+
+	public String getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(String endTime) {
+		this.endTime = endTime;
 	}
 }

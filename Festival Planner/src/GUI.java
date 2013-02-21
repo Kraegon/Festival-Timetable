@@ -14,12 +14,13 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 		private static final long serialVersionUID = 1L;
 		JButton center;
 	    JLabel statusLabel;
+    	
 	    private String status = "This panel will show you useful messages";
 	    IO io;
 	    
 	    public GUI()
 	    {
-	        super("FestivalPlanner"); // Todo: Add festivalnaam aan schermnaam
+	        super("FestivalPlanner"); 
 	        makeFrame();
 	        io = new IO();
 	    }
@@ -53,8 +54,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	                		statusLabel.setText("No festival set.");
 	                	} else {              	
 	                		addArtist();
-	                	}
-	                    
+	                	}                    
 	                }
 	            });
 	        
@@ -131,6 +131,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	            {
 	                public void actionPerformed(ActionEvent e) 
 	                { 
+	                	newFestivalDialog();
 	                    io.setNewFestival("default.fest");
 	                    setTitle("FestivalPlanner - " + io.getFilePath());
 	                }
@@ -231,23 +232,75 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	        /** menuBar op frame zetten **/
 	        setJMenuBar(menuBar);
 	    }
-	    
+	    private void newFestivalDialog()
+	    {
+	    	JTextField fesName = new JTextField();
+	    	JTextField date = new JTextField();
+	    	JTextField startTime = new JTextField();
+	    	JTextField endTime = new JTextField();
+	    	final JComponent[] inputs = new JComponent[] 
+	    		{
+	    			new JLabel("Name Festival:"),
+	    			fesName,
+	    			new JLabel("Set date:"),
+	    			date,
+	    			new JLabel("Set starting time:"),
+	    			startTime,
+	    			new JLabel("Set ending time:"),
+	    			endTime 			
+	    		};
+	    	boolean exitAllowed = false;
+	    	while(!exitAllowed){
+	    		if(JOptionPane.showConfirmDialog(null, inputs, "New Festival", JOptionPane.PLAIN_MESSAGE) != -1){
+	    			if(checkContents(inputs)){
+	    				JOptionPane.showConfirmDialog(null, new JLabel("Please fill in data."), "Error", JOptionPane.PLAIN_MESSAGE);
+	    			} else {
+	    				io.getFestival().setName(fesName.getText());
+	    				io.getFestival().setDate(date.getText());
+	    				io.getFestival().setStartTime(startTime.getText());
+	    				io.getFestival().setEndTime(endTime.getText());
+			    		statusLabel.setText("Name Festival: " + io.getFestival().getName() + 
+			    							" Set date: " + io.getFestival().getDate() + 
+			    							" Set start time: " + io.getFestival().getStartTime() +
+			    							" Set end time: " + io.getFestival().getEndTime());
+			    		
+			    		exitAllowed = true;
+	    			}
+	    		} else {
+	    			exitAllowed = true;
+	    		}
+	    	}
+	    	
+	    }
+	    private boolean checkContents(JComponent[] comps){
+	    boolean isAllEmpty = true;
+	    	for(JComponent comp : comps){
+				if(comp.getClass() == JTextField.class){
+					JTextField compTemp = (JTextField) comp; 
+					if(compTemp.getText().equals(""))
+						isAllEmpty = true;
+					else
+						isAllEmpty = false;
+				}
+			}
+	    return isAllEmpty;
+	    }
 	    private void addArtist()
 	    {
-	    	inputFrame = new InputFrame("artist", getLocation());
-	        statusLabel.setText("addArtist();");
+	    	inputFrame = new InputFrame("artist", getLocation(), io);
+	        statusLabel.setText("Opened add artist screen.");
 	    }
 	    
 	    private void addPerformance() 
 	    {
-	    	inputFrame = new InputFrame("performance", getLocation());
-	    	statusLabel.setText("addPerformance();");
+	    	inputFrame = new InputFrame("performance", getLocation(), io);
+	    	statusLabel.setText("Opened add performance screen.");
 		}
 	    
 	    private void addStage()
 	    {
-	    	inputFrame = new InputFrame("stage", getLocation());
-	    	statusLabel.setText("addStage();");
+	    	inputFrame = new InputFrame("stage", getLocation(), io);
+	    	statusLabel.setText("Opened add stage screen.");
 	    }
 	    
 	    private void showInfo()

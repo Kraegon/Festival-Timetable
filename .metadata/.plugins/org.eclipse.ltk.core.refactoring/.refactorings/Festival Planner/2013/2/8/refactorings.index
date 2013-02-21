@@ -1,0 +1,4 @@
+1361271753576	Rename local variable 'artistComponents'
+1361436250737	Encapsulate field 'name'
+1361436268085	Encapsulate field 'startTime'
+1361436272189	Encapsulate field 'endTime'
