@@ -14,8 +14,6 @@ public class IO {
 		INSTANCE = this;
 	}
 	public static IO getInstance(){
-		if(INSTANCE == null)
-			new IO("default.fest");
 		return INSTANCE;
 	}
 	

@@ -43,9 +43,9 @@ public class Artist implements Serializable {
 	}
 	
 	public String toString(){
-		String str = "Artist: \t" + name + "\nPlays: \t\t" + genre + "\n";
+		String str = "\n Artist: " + name + "\n \t Plays: " + genre + "\n";
 		if(!misc.equals(null) || !misc.equals(""))
-			str += "Misc: \t\t" + misc + "\n";
+			str += "\t Misc: " + misc + "\n";
 		return str;
 	}	
 }

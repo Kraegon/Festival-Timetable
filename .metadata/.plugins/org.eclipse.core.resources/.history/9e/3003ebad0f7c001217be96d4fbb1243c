@@ -22,7 +22,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	    {
 	        super("FestivalPlanner"); 
 	        makeFrame();
-	        io = IO.getInstance();
+	        io = new IO();
 	    }
 	    
 	    private void makeFrame()
@@ -287,19 +287,19 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	    }
 	    private void addArtist()
 	    {
-	    	inputFrame = new InputFrame("artist", getLocation());
+	    	inputFrame = new InputFrame("artist", getLocation(), io);
 	        statusLabel.setText("Opened add artist screen.");
 	    }
 	    
 	    private void addPerformance() 
 	    {
-	    	inputFrame = new InputFrame("performance", getLocation());
+	    	inputFrame = new InputFrame("performance", getLocation(), io);
 	    	statusLabel.setText("Opened add performance screen.");
 		}
 	    
 	    private void addStage()
 	    {
-	    	inputFrame = new InputFrame("stage", getLocation());
+	    	inputFrame = new InputFrame("stage", getLocation(), io);
 	    	statusLabel.setText("Opened add stage screen.");
 	    }
 	    

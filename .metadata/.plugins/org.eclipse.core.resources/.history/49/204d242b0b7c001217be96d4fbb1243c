@@ -16,8 +16,10 @@ public class InputFrame extends JFrame{
 	JPanel performancePane;
 	JPanel festivalPane;
 	JPanel errorPane;
+	IO io;
 	
-	public InputFrame(String source, Point sourcePoint){
+	public InputFrame(String source, Point sourcePoint, IO io){
+		this.io = io;
 		setDefaultCloseOperation(DISPOSE_ON_CLOSE);		
 		setLocation(new Point(sourcePoint.x + 150, sourcePoint.y + 150));
 		errorPane = new JPanel(null);
@@ -48,7 +50,7 @@ public class InputFrame extends JFrame{
 	public JPanel makeArtistPane(){
 		//Creates itself and container
 		artistPane = new JPanel(new BorderLayout());
-		setSize(new Dimension(300,200));
+		setPreferredSize(new Dimension(300,200));
 		final JComponent[] comps = new JComponent[]{
 				new JLabel("Name: "),new JLabel ("Genre: "),new JLabel ("Misc: "),
 				new JTextField("name"),	new JTextField("genre"), new JTextField("misc")
@@ -62,16 +64,30 @@ public class InputFrame extends JFrame{
 			if(component.getClass() == JLabel.class){
 				leftPane.add(component);
 			} else {
+				JTextField compTemp = (JTextField) component;
 				rightPane.add(component);
 			}
-		}	
-		JPanel okPane = new JPanel(new FlowLayout());
-		JButton ok = new JButton("OK");
-		ok.addActionListener(new InputListener(this, comps));
-		okPane.add(ok);
+		}
 		artistPane.add(leftPane, BorderLayout.WEST);
 		artistPane.add(rightPane, BorderLayout.CENTER);
-		artistPane.add(okPane, BorderLayout.SOUTH);
+		JPanel okPane = new JPanel(null);
+		JButton ok = new JButton("OK");
+		ok.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String[] artistDetails = new String[4];
+				int counter = 0;
+				for(int i = 0; i < comps.length; i++){
+					if(comps[i].getClass() == JTextField.class){
+						JTextField compTemp = (JTextField) comps[i];
+						artistDetails[counter] = compTemp.getText();
+						counter++;
+					} 
+				}
+				io.getFestival().addArtist(new Artist(artistDetails[0], artistDetails[1], artistDetails[2]));
+			}
+		});
+		okPane.add(ok);
+		artistPane.add(okPane);
 		return artistPane;
 	}
 	public JPanel makeStagePane(){
@@ -98,32 +114,4 @@ public class InputFrame extends JFrame{
 	public void bePretty(){
 		return;
 	}
-}
-class InputListener implements ActionListener{
-	private JFrame frame;
-	private JComponent[] comps;
-	/**
-	 * Constructor for the InputListerener to 
-	 * @param frame : To be closed at the end of execution.
-	 * @param comps : Components to read out.
-	 */
-	public InputListener(JFrame frame, JComponent[] comps){
-		this.frame = frame;
-		this.comps = comps;
-	}
-	
-	public void actionPerformed(ActionEvent arg0) {
-		String[] artistDetails = new String[4];
-		int counter = 0;
-		for(int i = 0; i < comps.length; i++){
-			if(comps[i].getClass() == JTextField.class){
-				JTextField compTemp = (JTextField) comps[i];
-				artistDetails[counter] = compTemp.getText();
-				counter++;
-			} 
-		}
-		IO.getInstance().getFestival().addArtist(new Artist(artistDetails[0], artistDetails[1], artistDetails[2]));
-		frame.dispose();
-	}
-	
 }

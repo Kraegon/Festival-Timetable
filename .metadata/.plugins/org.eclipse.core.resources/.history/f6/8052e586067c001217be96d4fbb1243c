@@ -64,9 +64,9 @@ public class Festival implements Serializable{
 	
 	public String toString(){
 		String str = "";
-		str += "Festival name: " + name + "\n";
-		str += "Date of festival " + date + "\n";
-		str += "Runs from " + startTime + " to " + endTime + "\n";
+		str += "Festival name: " + name;
+		str += "Date of festival " + date;
+		str += "Runs from " + startTime + " to " + endTime;
 		if(stages.isEmpty())
 			str += "No stages made. \n";
 		else

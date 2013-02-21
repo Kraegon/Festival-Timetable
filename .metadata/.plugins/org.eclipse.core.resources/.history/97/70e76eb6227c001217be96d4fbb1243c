@@ -62,9 +62,11 @@ public class InputFrame extends JFrame{
 			if(component.getClass() == JLabel.class){
 				leftPane.add(component);
 			} else {
+				JTextField compTemp = (JTextField) component;
 				rightPane.add(component);
 			}
-		}	
+		}
+		
 		JPanel okPane = new JPanel(new FlowLayout());
 		JButton ok = new JButton("OK");
 		ok.addActionListener(new InputListener(this, comps));
@@ -102,11 +104,7 @@ public class InputFrame extends JFrame{
 class InputListener implements ActionListener{
 	private JFrame frame;
 	private JComponent[] comps;
-	/**
-	 * Constructor for the InputListerener to 
-	 * @param frame : To be closed at the end of execution.
-	 * @param comps : Components to read out.
-	 */
+	
 	public InputListener(JFrame frame, JComponent[] comps){
 		this.frame = frame;
 		this.comps = comps;

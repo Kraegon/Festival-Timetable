@@ -7,16 +7,11 @@ import java.io.*;
 public class IO {
 	private Festival festival;	
 	private String filePath;	
-	private static IO INSTANCE;
+	
 	File festiFile;	
 	
 	public IO(){
-		INSTANCE = this;
-	}
-	public static IO getInstance(){
-		if(INSTANCE == null)
-			new IO("default.fest");
-		return INSTANCE;
+		
 	}
 	
 	public IO(String filePath){
@@ -27,7 +22,6 @@ public class IO {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		INSTANCE = this;
 	}
 	
 	public Festival getFestival() {
