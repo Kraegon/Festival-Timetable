@@ -8,7 +8,6 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
 
-
 public class InputFrame extends JFrame{
 	
 	private static final long serialVersionUID = -1971482195672574230L;

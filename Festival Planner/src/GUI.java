@@ -30,6 +30,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	    JLabel statusLabel;
     	
 	    private String status = "This panel will show you useful messages";
+	    JButton[] buttons;
 	    IO io;
 	    CheckInputs checkInp;
 	    
@@ -166,6 +167,15 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	        setContentPane(contentPane);
 	        setSize(800, 600);
 	        setVisible(true);
+	        
+	        /** Maak een public verzameling van alle buttons die in deze methode lokaal staan **/
+	        buttons = new JButton[]
+	        {
+	        	addArtist, addPerformance, addStage, 
+	        	editArtist, editPerformance, editStage
+	        };
+	        // Alle knoppen
+	        disableButtons(buttons);
 	    }
 	    
 	    private void makeMenuBar()
@@ -186,8 +196,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	        newMenu.addActionListener(new ActionListener() 
 	            {
 	                public void actionPerformed(ActionEvent e) 
-	                { 
-	                    io.setNewFestival("default.fest");
+	                {
 	                    setTitle("FestivalPlanner - " + io.getFilePath());
 	                    newFestivalDialog();
 	                }
@@ -287,7 +296,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	        
 	        /** menuBar op frame zetten **/
 	        setJMenuBar(menuBar);
+	        
 	    }
+	    
 	    private void newFestivalDialog()
 	    {
 	    	JTextField fesName = new JTextField();
@@ -402,6 +413,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 			    	// all data was entered correctly
 			    	if (correctData)
 			    	{	
+			    		io.setNewFestival("default.fest");
+			    		enableButtons(buttons);
 			    		io.getFestival().setName(fesName.getText());
 	    				io.getFestival().setDate(day.getText() + " - " + month.getText() + " - " + year.getText());
 	    				io.getFestival().setStartTime(startHour.getText() + ":" + startMinute.getText());
@@ -461,5 +474,21 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	    private void executeSimulator()
 	    {
 	    	statusLabel.setText("executeSimulator();");
+	    }
+	    
+	    private void disableButtons(JButton[] buttons)
+	    {
+	    	for (JButton b : buttons)
+	    	{
+	    		b.setEnabled(false);
+	    	}
+	    }
+	    
+	    private void enableButtons(JButton[] buttons)
+	    {
+	    	for (JButton b : buttons)
+	    	{
+	    		b.setEnabled(true);
+	    	}
 	    }
 	}
