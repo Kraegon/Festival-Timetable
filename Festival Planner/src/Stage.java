@@ -6,8 +6,7 @@ import java.io.Serializable;
  *
  */
 public class Stage implements Serializable{
-
-
+	
 	private static final long serialVersionUID = 1058035801560913516L;
 	private String name;
 	private int visitorsMax;

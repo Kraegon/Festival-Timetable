@@ -43,7 +43,14 @@ public class Festival implements Serializable{
 			throw new IllegalArgumentException("No artists created");
 		performances.add(performance);
 	}
-	
+	public Artist findArtist(Artist targetArtist){
+		for(Artist artist : artists){
+			if(artist == targetArtist){
+				return artist;
+			}
+		}
+		return null;
+	}
 	public LinkedList<Stage> getStages() {
 		return stages;
 	}
@@ -63,7 +70,7 @@ public class Festival implements Serializable{
 	}
 	
 	public String toString(){
-		String str = "";
+		String str = "\n -------- \n";
 		str += "Festival name: " + name + "\n";
 		str += "Date of festival " + date + "\n";
 		str += "Runs from " + startTime + " to " + endTime + "\n";

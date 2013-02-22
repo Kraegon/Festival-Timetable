@@ -1,10 +1,24 @@
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.GregorianCalendar;
 
-import javax.swing.*;
-import javax.swing.border.*;
-
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 	public class GUI extends JFrame
@@ -17,12 +31,14 @@ import javax.swing.filechooser.FileNameExtensionFilter;
     	
 	    private String status = "This panel will show you useful messages";
 	    IO io;
+	    CheckInputs checkInp;
 	    
 	    public GUI()
 	    {
 	        super("FestivalPlanner"); 
 	        makeFrame();
 	        io = IO.getInstance();
+	        checkInp = new CheckInputs();
 	    }
 	    
 	    private void makeFrame()
@@ -83,6 +99,46 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	                	} else {              	
 	                		addStage();
 	                	}
+	                }
+	            });
+	        westPanel.add(new JSeparator());
+	        JButton editArtist = new JButton("Edit Artist");
+	        westPanel.add(editArtist);
+	        editArtist.addActionListener(new ActionListener() 
+	            {
+	                public void actionPerformed(ActionEvent e) 
+	                { 
+	                	if(io.getFestival() == null){
+	                		statusLabel.setText("No festival set.");
+	                	} else {              	
+	                		editArtist();
+	                	}                    
+	                }
+	            });
+	        JButton editStage = new JButton("Edit Stage");
+	        westPanel.add(editStage);
+	        editStage.addActionListener(new ActionListener() 
+	            {
+	                public void actionPerformed(ActionEvent e) 
+	                { 
+	                	if(io.getFestival() == null){
+	                		statusLabel.setText("No festival set.");
+	                	} else {              	
+	                		editStage();
+	                	}                    
+	                }
+	            });
+	        JButton editPerformance = new JButton("Edit Performance");
+	        westPanel.add(editPerformance);
+	        editPerformance.addActionListener(new ActionListener() 
+	            {
+	                public void actionPerformed(ActionEvent e) 
+	                { 
+	                	if(io.getFestival() == null){
+	                		statusLabel.setText("No festival set.");
+	                	} else {              	
+	                		editPerformance();
+	                	}                    
 	                }
 	            });
 	          
@@ -235,56 +291,134 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	    private void newFestivalDialog()
 	    {
 	    	JTextField fesName = new JTextField();
-	    	JTextField date = new JTextField();
-	    	JTextField startTime = new JTextField();
-	    	JTextField endTime = new JTextField();
+	    	JTextField day = new JTextField();
+	    	JTextField month = new JTextField();
+	    	JTextField year = new JTextField();
+	    	JTextField startHour = new JTextField();
+	    	JTextField startMinute = new JTextField();
+	    	JTextField endHour = new JTextField();
+	    	JTextField endMinute = new JTextField();
+	    	JLabel errorLabel = new JLabel();
+	    	
 	    	final JComponent[] inputs = new JComponent[] 
 	    		{
 	    			new JLabel("Name Festival:"),
 	    			fesName,
-	    			new JLabel("Set date:"),
-	    			date,
-	    			new JLabel("Set starting time:"),
-	    			startTime,
-	    			new JLabel("Set ending time:"),
-	    			endTime 			
+	    			new JLabel("Set date (DD-MM-YYYY):"),
+	    			day, month, year,
+	    			new JLabel("Set starting time (Hours-Minutes):"),
+	    			startHour, startMinute,
+	    			new JLabel("Set ending time (Hours-Minutes):"),
+	    			endHour, endMinute,
+	    			errorLabel
 	    		};
-	    	boolean exitAllowed = false;
-	    	while(!exitAllowed){
-	    		if(JOptionPane.showConfirmDialog(null, inputs, "New Festival", JOptionPane.PLAIN_MESSAGE) != -1){
-	    			if(checkContents(inputs)){
-	    				JOptionPane.showConfirmDialog(null, new JLabel("Please fill in data."), "Error", JOptionPane.PLAIN_MESSAGE);
-	    			} else {
-	    				io.getFestival().setName(fesName.getText());
-	    				io.getFestival().setDate(date.getText());
-	    				io.getFestival().setStartTime(startTime.getText());
-	    				io.getFestival().setEndTime(endTime.getText());
-			    		statusLabel.setText("Name Festival: " + io.getFestival().getName() + 
-			    							" Set date: " + io.getFestival().getDate() + 
-			    							" Set start time: " + io.getFestival().getStartTime() +
-			    							" Set end time: " + io.getFestival().getEndTime());
-			    		
-			    		exitAllowed = true;
-	    			}
-	    		} else {
-	    			exitAllowed = true;
-	    		}
-	    	}
+	    	// Alle inputvelden waar alleen nummers in mogen
+	    	final JTextField[] numberInputs = new JTextField[]
+    			{
+	    			day, month, year, startHour, startMinute, endHour, endMinute
+    			};
 	    	
+	    	boolean exitAllowed = false;
+	    	boolean correctData = true;
+	    	
+		    while(!exitAllowed)
+		    {
+		    	// -1 = defaultClose; 2 = Cancel; 0 = OK;
+		    	if (JOptionPane.showConfirmDialog(null, inputs, "New Festival", JOptionPane.OK_CANCEL_OPTION) == 0)
+		    	{
+		    		//correctData aan begin van checkloop op true zetten
+			    	correctData = true;
+			    	
+			    	// empty fields?
+			    	for (JComponent i : inputs)
+			    	{
+			    		if (i.getClass() == JTextField.class)
+			    		{
+			    			JTextField compTemp = (JTextField) i;
+			    			if (compTemp.getText().equals(""))
+			    			{
+			    				errorLabel.setText("Please fill in every field!");
+			    				correctData = false;
+				    			break;
+			    			}
+			    		}
+			    	}
+			    	
+			    	for (JTextField j : numberInputs)
+			    	{
+				    	if (!checkInp.onlyNumbers(j.getText()))
+				    	{
+				    		errorLabel.setText("Please use numbers when entering dates or moments.");
+				    		correctData = false;
+				    		break;
+				    	}
+				    }
+			    	
+			    	// Check leading zero's
+			    	for (JTextField j : numberInputs)
+			    	{
+				    	if (checkInp.isFirstCharZero(j.getText()))
+				    	{
+				    		errorLabel.setText("Please refrain from using leading zero's.");
+				    		correctData = false;
+				    		break;
+				    	}
+				    }
+			    	
+			    	// Check timevalues
+			    	if (correctData)
+			    	{
+			    		if (!checkInp.isMinuteSecondValue(startMinute.getText()) ||
+			    			!checkInp.isMinuteSecondValue(endMinute.getText()) ||
+			    			!checkInp.isHourValue(startHour.getText()) ||
+			    			!checkInp.isHourValue(endHour.getText()) ||
+			    			!checkInp.isDay(day.getText()) ||
+			    			!checkInp.isMonth(month.getText()) ||
+			    			!checkInp.isYear(year.getText()))
+			    		{
+			    			errorLabel.setText("Please use valid values when entering dates or moments");
+			    			correctData = false;
+			    			System.out.println("WRONG TIMEVALUE: THE WINDOW IS NOT SUPPOSED TO CLOSE ITSELF!!");
+				    		//break;
+			    		}
+			    	}
+			    	
+			    	//Check if startHour/Minute take place before endHour/endMinute
+			    	GregorianCalendar startDate = new GregorianCalendar(2000, 12, 12, 
+			    			Integer.parseInt(startHour.getText()),
+			    			Integer.parseInt(startMinute.getText()));
+			    	
+			    	GregorianCalendar endDate = new GregorianCalendar(2000, 12, 12, 
+							Integer.parseInt(endHour.getText()),
+							Integer.parseInt(endMinute.getText()));
+			    	
+			    	if(startDate.getTimeInMillis() > endDate.getTimeInMillis())
+			    	{
+			    		errorLabel.setText("The ending time can't be before the starting time of your festival.");
+		    			correctData = false;
+			    		//break;
+			    	}
+			    	
+			    	// all data was entered correctly
+			    	if (correctData)
+			    	{	
+			    		io.getFestival().setName(fesName.getText());
+	    				io.getFestival().setDate(day.getText() + " - " + month.getText() + " - " + year.getText());
+	    				io.getFestival().setStartTime(startHour.getText() + ":" + startMinute.getText());
+	    				io.getFestival().setEndTime(endHour.getText() + ":" + endMinute.getText());
+				    	statusLabel.setText("Success");
+				    	exitAllowed = true;
+			    	}	
+			    }
+			    else 
+			    {
+			    	// close window
+			    	exitAllowed = true;
+			    	System.out.println("CANCELED");
+			    }
+		    }
 	    }
-	    private boolean checkContents(JComponent[] comps){
-	    boolean isAllEmpty = true;
-	    	for(JComponent comp : comps){
-				if(comp.getClass() == JTextField.class){
-					JTextField compTemp = (JTextField) comp; 
-					if(compTemp.getText().equals(""))
-						isAllEmpty = true;
-					else
-						isAllEmpty = false;
-				}
-			}
-	    return isAllEmpty;
-	    }
+	  
 	    private void addArtist()
 	    {
 	    	inputFrame = new InputFrame("artist", getLocation());
@@ -302,7 +436,18 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	    	inputFrame = new InputFrame("stage", getLocation());
 	    	statusLabel.setText("Opened add stage screen.");
 	    }
-	    
+	    private void editArtist(){
+	    	inputFrame = new InputFrame("editArtist", getLocation());
+	    	statusLabel.setText("Opened edit screen.");
+	    }
+	    private void editStage(){
+	    	inputFrame = new InputFrame("editStage", getLocation());
+	    	statusLabel.setText("Opened edit screen.");
+	    }
+	    private void editPerformance(){
+	    	inputFrame = new InputFrame("editPerformance", getLocation());
+	    	statusLabel.setText("Opened edit screen.");
+	    }
 	    private void showInfo()
 	    {
 	        JOptionPane.showMessageDialog(null, "This program was created by projectgroup TIA6 from Avans Hogeschool in Breda.");

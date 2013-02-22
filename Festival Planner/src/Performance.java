@@ -10,6 +10,7 @@ import java.util.*;
 public class Performance implements Serializable{
 
 	private static final long serialVersionUID = -7222551310907198818L;
+	private String name;
 	private ArrayList<Artist> artists;
 	private Stage stage;
 	private float startTime;
@@ -60,12 +61,20 @@ public class Performance implements Serializable{
 	}
 	
 	public String toString(){
-		String str = "\n Performance of:";
+		String str = "\n Performance name:" + name + "including: ";
 		for(Artist a : artists){
 			str += "\n \t " + a.getName();
 		}
 		str += "\n \t At " + startTime + " till " + endTime + "\n \t On stage " + stage.getName() + " with expected popularity " + popularity;
 		return str;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 	
 }
