@@ -43,10 +43,26 @@ public class Festival implements Serializable{
 			throw new IllegalArgumentException("No artists created");
 		performances.add(performance);
 	}
-	public Artist findArtist(Artist targetArtist){
+	public Artist findArtist(String targetArtist){
 		for(Artist artist : artists){
-			if(artist == targetArtist){
+			if(artist.getName().equals(targetArtist)){
 				return artist;
+			}
+		}
+		return null;
+	}
+	public Stage findStage(String targetStage){
+		for(Stage stage : stages){
+			if(stage.getName().equals(targetStage)){
+				return stage;
+			}
+		}
+		return null;
+	}
+	public Performance findPerformance(String targetPerformance){
+		for(Performance performance : performances){
+			if(performance.getName().equals(targetPerformance)){
+				return performance;
 			}
 		}
 		return null;

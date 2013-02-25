@@ -24,7 +24,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	public class GUI extends JFrame
 	{
 		// Attributen
-		private JFrame inputFrame;
+		private InputFrame inputFrame;
 		private static final long serialVersionUID = 1L;
 		JButton center;
 	    JLabel statusLabel;
@@ -73,6 +73,19 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	                		addArtist();
 	                	}                    
 	                }
+	            });        
+	        JButton addStage = new JButton("Add Stage");
+	        westPanel.add(addStage);
+	        addStage.addActionListener(new ActionListener() 
+	            {
+	                public void actionPerformed(ActionEvent e) 
+	                { 
+	                	if(io.getFestival() == null){
+	                		statusLabel.setText("No festival set.");
+	                	} else {              	
+	                		addStage();
+	                	}
+	                }
 	            });
 	        
 	        JButton addPerformance = new JButton("Add Performance");
@@ -85,20 +98,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	                		statusLabel.setText("No festival set.");
 	                	} else {              	
 	                		addPerformance();
-	                	}
-	                }
-	            });
-	        
-	        JButton addStage = new JButton("Add Stage");
-	        westPanel.add(addStage);
-	        addStage.addActionListener(new ActionListener() 
-	            {
-	                public void actionPerformed(ActionEvent e) 
-	                { 
-	                	if(io.getFestival() == null){
-	                		statusLabel.setText("No festival set.");
-	                	} else {              	
-	                		addStage();
 	                	}
 	                }
 	            });
@@ -259,7 +258,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	                	choose.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 	                	int choice = choose.showOpenDialog(getContentPane());
 	                	if(choice == JFileChooser.APPROVE_OPTION) {
-	                		io.setFilePath(choose.getSelectedFile().getName());
+	                		io.setFilePath(choose.getSelectedFile().getPath());
 	                		io.setFestiFile(choose.getSelectedFile());
 	                		try{
 	                			io.openFestival();
@@ -270,6 +269,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	                			exc.printStackTrace();
 	                		}
 	                	}
+			    		enableButtons(buttons);
 	                }
 	            });
 	        fileMenu.add(openMenu);	           

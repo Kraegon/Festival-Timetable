@@ -5,7 +5,7 @@ import java.io.Serializable;
  * @author Julian G. West
  *
  */
-public class Stage implements Serializable{
+public class Stage implements Serializable, FestivalObject{
 	
 	private static final long serialVersionUID = 1058035801560913516L;
 	private String name;
@@ -15,7 +15,7 @@ public class Stage implements Serializable{
 	public Stage(String name, int visitorsMax, boolean isMainStage) {
 		this.name = name;
 		this.visitorsMax = visitorsMax;
-		this.setMainStage(isMainStage);
+		this.isMainStage = isMainStage;
 	}
 	
 	public Stage(){
@@ -39,12 +39,12 @@ public class Stage implements Serializable{
 		return isMainStage;
 	}
 
-	public void setMainStage(boolean isMainStage) {
+	public void setIsMainStage(boolean isMainStage) {
 		this.isMainStage = isMainStage;
 	}
 	
 	public String toString(){
-		return "\n Stage: " + name + "\n \t Visitors maximum: " + visitorsMax + "\n \t Is this a main stage? " + isMainStage;		
+		return "\nStage: " + name + "\nVisitors maximum: " + visitorsMax + "\nIs this a main stage? " + isMainStage  + "\n ------- \n";		
 	}
 	
 }

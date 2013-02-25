@@ -1,3 +1,4 @@
+import java.awt.Dimension;
 import java.awt.LayoutManager;
 import java.awt.Point;
 
@@ -7,99 +8,57 @@ import javax.swing.event.ListSelectionListener;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.LinkedList;
 
-public class InputFrame extends JFrame{
+public class InputFrame{
 	
-	private static final long serialVersionUID = -1971482195672574230L;
+	JFrame frame;
 	String source;
-	JPanel artistPane;
-	JPanel stagePane;
-	JPanel performancePane;
-	JPanel festivalPane;
-	JPanel errorPane;
 	
 	public InputFrame(String source, Point sourcePoint){
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);		
-		setLocation(new Point(sourcePoint.x + 150, sourcePoint.y + 150));
+		this.frame = new JFrame("");
+		frame.setDefaultCloseOperation(frame.DISPOSE_ON_CLOSE);		
+		frame.setLocation(new Point(sourcePoint.x + 150, sourcePoint.y + 150));
 		this.source = source;
 		switch(source){
 		case "artist":
-			setContentPane(makeArtistPane());
-			setTitle("Add artist");
+			ArtistPanel aPanel = new ArtistPanel();
+			frame.setContentPane(aPanel.makeArtistPane(frame));
+			frame.setTitle("Add artist");
+			frame.setSize(new Dimension(300,200));
 			break;
 		case "stage":
-			setContentPane(makeStagePane());
-			setTitle("Add stage");
+			StagePanel sPanel = new StagePanel();
+			frame.setContentPane(sPanel.makeStagePane(frame));
+			frame.setTitle("Add stage");
+			frame.setSize(new Dimension(250, 150));
 			break;
 		case "performance":
-			setContentPane(makePerformancePane());
-			setTitle("Add performance");
+			PerformancePanel pPanel = new PerformancePanel();
+			frame.setContentPane(pPanel.makePerformancePane(frame));
+			frame.setTitle("Add performance");
+			frame.setSize(new Dimension(400,400));
 			break;
 		case "editArtist":
-			setContentPane(makeSelector());
-			setTitle("Edit artist");
+			frame.setContentPane(makeSelector());
+			frame.setTitle("Edit artist");
 			break;
 		case "editStage":
-			setContentPane(makeSelector());
-			setTitle("Edit stage");
+			frame.setContentPane(makeSelector());
+			frame.setTitle("Edit stage");
 			break;
 		case "editPerformance":
-			setContentPane(makeSelector());
-			setTitle("Edit performance");
+			frame.setContentPane(makeSelector());
+			frame.setTitle("Edit performance");
 			break;
 		default:
-			setContentPane(errorPane);
-			setTitle("Error");
+			frame.setContentPane(makeErrorPane());
+			frame.setTitle("Error");
 			break;
 		}
-		setVisible(true);
+		frame.setVisible(true);
 	}
 	
-	public JPanel makeArtistPane(){
-		//Creates itself and container
-		artistPane = new JPanel(new BorderLayout());
-		setSize(new Dimension(300,200));
-		final JComponent[] comps = new JComponent[]{
-				new JLabel("Name: "),new JLabel ("Genre: "),new JLabel ("Misc: "),
-				new JTextField("name"),	new JTextField("genre"), new JTextField("misc")
-		};
-		JPanel leftPane = new JPanel(new GridLayout(3,1));
-		JPanel rightPane = new JPanel(new GridLayout(3,1));
-		//Aesthetics
-		bePretty();
-		//Add ingredients to the soup
-		for(JComponent component : comps){
-			if(component.getClass() == JLabel.class){
-				leftPane.add(component);
-			} else {
-				rightPane.add(component);
-			}
-		}	
-		JPanel okPane = new JPanel(new FlowLayout());
-		JButton ok = new JButton("OK");
-		ok.addActionListener(new InputListener(this, comps));
-		okPane.add(ok);
-		artistPane.add(leftPane, BorderLayout.WEST);
-		artistPane.add(rightPane, BorderLayout.CENTER);
-		artistPane.add(okPane, BorderLayout.SOUTH);
-		setResizable(false);
-		return artistPane;
-	}
-	public JPanel makeStagePane(){
-		stagePane = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		stagePane.add(new JLabel("Is stage!"));
-		return stagePane;
-	}
-	public JPanel makePerformancePane(){
-		performancePane = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		performancePane.add(new JLabel("Is performance!"));
-		return performancePane;
-	}	
-	public JPanel makeInputPane(){
-		performancePane = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		performancePane.add(new JLabel("Is input!"));
-		return performancePane;
-	}
 	public JPanel makeErrorPane(){
 		JPanel errorPane = new JPanel(new BorderLayout());
 		errorPane.add(new JLabel("Something has gone horribly wrong."), BorderLayout.CENTER);
@@ -132,81 +91,34 @@ public class InputFrame extends JFrame{
 		}
 		final JList<String> list = new JList<String>(names);
 		list.setSelectedIndex(0);
-		list.addListSelectionListener(new ListSelectionListener() {
-			public void valueChanged(ListSelectionEvent e) {
-				System.out.println(list.getSelectedValue());			
-			}
-		});
 		JPanel okPane = new JPanel(new FlowLayout());
 		JButton ok = new JButton("OK");
 		ok.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
+				switch(source){
+					case "editArtist":
+						ArtistPanel aPanel = new ArtistPanel();
+						frame.setContentPane(aPanel.editArtistPane(frame, list.getSelectedValue()));
+						frame.setSize(new Dimension(300,200));
+					break;
+					case "editStage":
+						StagePanel sPanel = new StagePanel();
+						frame.setContentPane(sPanel.editStagePane(frame, list.getSelectedValue()));
+						frame.setSize(new Dimension(250, 150));
+					break;
+					case "editPerformance":
+						PerformancePanel pPanel = new PerformancePanel();
+						frame.setContentPane(pPanel.editPerformancePane(frame, list.getSelectedValue()));
+						frame.setSize(new Dimension(400,400));
+					break;
+				}
 			}
 		});
 		okPane.add(ok);
 		selectorPane.add(okPane, BorderLayout.SOUTH);
 		selectorPane.add(new JScrollPane(list), BorderLayout.CENTER);
-		setSize(new Dimension(200,500));
-		setResizable(true);
+		frame.setSize(new Dimension(200,500));
+		frame.setResizable(true);
 		return selectorPane;
 	}
-	public void bePretty(){
-		return;
-	}
-}
-class InputListener implements ActionListener{
-	private JFrame frame;
-	private JComponent[] comps;
-	/**
-	 * Constructor for the InputListerener to 
-	 * @param frame : To be closed at the end of execution.
-	 * @param comps : Components to read out.
-	 */
-	public InputListener(JFrame frame, JComponent[] comps){
-		this.frame = frame;
-		this.comps = comps;
-	}
-	
-	public void actionPerformed(ActionEvent arg0) {
-		String[] artistDetails = new String[4];
-		int counter = 0;
-		for(int i = 0; i < comps.length; i++){
-			if(comps[i].getClass() == JTextField.class){
-				JTextField compTemp = (JTextField) comps[i];
-				artistDetails[counter] = compTemp.getText();
-				counter++;
-			} 
-		}
-		IO.getInstance().getFestival().addArtist(new Artist(artistDetails[0], artistDetails[1], artistDetails[2]));
-		frame.dispose();
-	}
-}
-class EditListener implements ActionListener{
-	private JFrame frame;
-	private JComponent[] comps;
-	/**
-	 * Constructor for the InputListerener to 
-	 * @param frame : To be closed at the end of execution.
-	 * @param comps : Components to read out.
-	 */
-	public EditListener(JFrame frame, JComponent[] comps){
-		this.frame = frame;
-		this.comps = comps;
-	}
-	
-	public void actionPerformed(ActionEvent arg0) {
-		String[] artistDetails = new String[4];
-		int counter = 0;
-		for(int i = 0; i < comps.length; i++){
-			if(comps[i].getClass() == JTextField.class){
-				JTextField compTemp = (JTextField) comps[i];
-				artistDetails[counter] = compTemp.getText();
-				counter++;
-			} 
-		}
-		//IO.getInstance().getFestival().findArtist(targetArtist).artistDetails[0], artistDetails[1], artistDetails[2]));
-		frame.dispose();
-	}
-	
 }

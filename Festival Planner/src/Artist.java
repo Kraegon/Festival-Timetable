@@ -5,7 +5,7 @@ import java.io.Serializable;
  * @author Julian G. West
  *
  */
-public class Artist implements Serializable {
+public class Artist implements Serializable, FestivalObject {
 
 	private static final long serialVersionUID = 3223044006510097311L;
 	private String name;
@@ -44,8 +44,9 @@ public class Artist implements Serializable {
 	
 	public String toString(){
 		String str = "Artist: \t" + name + "\nPlays: \t\t" + genre + "\n";
-		if(!misc.equals(null) || !misc.equals(""))
+		if(!misc.equals(null) || !misc.equals("") || !misc.equals(" "))
 			str += "Misc: \t\t" + misc + "\n";
+		str += "------- \n";
 		return str;
 	}	
 }

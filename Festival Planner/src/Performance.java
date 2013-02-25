@@ -7,7 +7,7 @@ import java.util.*;
  * @author Julian G. West
  *
  */
-public class Performance implements Serializable{
+public class Performance implements Serializable, FestivalObject{
 
 	private static final long serialVersionUID = -7222551310907198818L;
 	private String name;
@@ -17,9 +17,10 @@ public class Performance implements Serializable{
 	private float endTime;
 	private int popularity;
 	
-	public Performance(float startTime, float endTime, int popularity, Stage stage) throws ArithmeticException {
+	public Performance(String name, float startTime, float endTime, int popularity, Stage stage) throws ArithmeticException {
 		if(startTime > endTime)
 			throw new ArithmeticException("Ending time must be greater than starting time");
+		this.name = name;
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.popularity = popularity;
@@ -27,13 +28,31 @@ public class Performance implements Serializable{
 		artists = new ArrayList<Artist>();
 	}
 	
+	public float getStartTime() {
+		return startTime;
+	}
+
+	public void setStartTime(float startTime) {
+		this.startTime = startTime;
+	}
+
+	public float getEndTime() {
+		return endTime;
+	}
+
+	public void setEndTime(float endTime) {
+		this.endTime = endTime;
+	}
+
 	public ArrayList<Artist> getArtists() {
 		return artists;
 	}
 	public void addArtists(Artist artist) {
 		artists.add(artist);
 	}
-	
+	public void clearArtists(){
+		artists.clear();
+	}
 	public Stage getStage() {
 		return stage;
 	}
@@ -41,16 +60,6 @@ public class Performance implements Serializable{
 		this.stage = stage;
 	}
 	
-	public float[] getTime(){
-		float[] time = new float[1];
-		time[0] = startTime;
-		time[1] = endTime;
-		return time;
-	}
-	public void setTime(int startTime, int endTime) {
-		this.startTime = startTime;
-		this.endTime = endTime;
-	}
 	
 	
 	public int getPopularity() {
@@ -61,11 +70,11 @@ public class Performance implements Serializable{
 	}
 	
 	public String toString(){
-		String str = "\n Performance name:" + name + "including: ";
+		String str = "Performance name:" + name + "\nIncluding:";
 		for(Artist a : artists){
-			str += "\n \t " + a.getName();
+			str += "\n\t" + a.getName();
 		}
-		str += "\n \t At " + startTime + " till " + endTime + "\n \t On stage " + stage.getName() + " with expected popularity " + popularity;
+		str += "\nAt " + startTime + " till " + endTime + "\nOn stage " + stage.getName() + " with expected popularity " + popularity + "\n -------";
 		return str;
 	}
 
