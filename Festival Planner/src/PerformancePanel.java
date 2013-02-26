@@ -9,6 +9,8 @@ import java.util.LinkedList;
 import javax.swing.*;
 
 
+
+
 public class PerformancePanel{
 	
 	public JPanel makePerformancePane(JFrame frame){
@@ -26,7 +28,7 @@ public class PerformancePanel{
 		final DefaultListModel<String> queueList = new DefaultListModel<String>();
 		final JList<String> artistsList = new JList<String>(artistNames);
 		final JList<String> artistQueue = new JList<String>(queueList);
-		JButton artistAdd = new JButton("»");
+		JButton artistAdd = new JButton("»»");
 		artistAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String element = artistsList.getSelectedValue();
@@ -34,7 +36,7 @@ public class PerformancePanel{
 				artistNames.removeElement(element);
 			}
 		});
-		JButton artistRemove = new JButton("«");
+		JButton artistRemove = new JButton("««");
 		artistRemove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String element = artistQueue.getSelectedValue();
@@ -161,10 +163,11 @@ public class PerformancePanel{
 		JButton delete = new JButton("Delete");
 		delete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				IO.getInstance().getFestival().getArtists().remove(performance);
+				IO.getInstance().getFestival().getPerformances().remove(performance);
 				frame.dispose();
 			}
 		});
+		JPanel northPanel = new JPanel(new GridLayout(1,4));
 		JPanel leftPanel = new JPanel(new GridLayout(1,1));//Stage list
 		JPanel centerPanel = new JPanel(new BorderLayout());//Container for center panels
 		JPanel southPanel = new JPanel(new GridLayout(1, 2));//OK button
@@ -172,13 +175,16 @@ public class PerformancePanel{
 		JPanel centerTopMiddlePanel = new JPanel(new GridLayout(2,1));
 		JPanel centerBottomPanel = new JPanel(new GridLayout(4,2));//Start time, end time and estimated popularity.
 		leftPanel.add(new JScrollPane(comps[11]));
-		leftPanel.setSize(new Dimension(100, 300));
-		southPanel.add(okButton);
+		southPanel.add(okButton);	
 		centerTopPanel.add(new JScrollPane(artistsList));
 		centerTopMiddlePanel.add(artistAdd);
 		centerTopMiddlePanel.add(artistRemove);
 		centerTopPanel.add(centerTopMiddlePanel);
 		centerTopPanel.add(new JScrollPane(artistQueue));
+		northPanel.add(comps[0]);
+		northPanel.add(comps[1]);
+		northPanel.add(new JLabel(""));
+		northPanel.add(comps[2]);
 		centerBottomPanel.add(comps[6]);
 		centerBottomPanel.add(comps[7]);
 		centerBottomPanel.add(comps[3]);
@@ -191,6 +197,7 @@ public class PerformancePanel{
 		southPanel.add(okButton);
 		centerPanel.add(centerTopPanel, BorderLayout.NORTH);
 		centerPanel.add(centerBottomPanel, BorderLayout.SOUTH);
+		performancePane.add(northPanel, BorderLayout.NORTH);
 		performancePane.add(leftPanel, BorderLayout.WEST);
 		performancePane.add(centerPanel, BorderLayout.CENTER);
 		performancePane.add(southPanel, BorderLayout.SOUTH);

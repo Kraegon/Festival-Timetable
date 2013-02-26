@@ -1,3 +1,5 @@
+
+
 /**
  * @author Lesley
  * Use this class for checking timevalues and such.

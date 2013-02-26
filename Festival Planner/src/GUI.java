@@ -1,3 +1,8 @@
+
+
+
+
+
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.Point;
@@ -18,8 +23,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
 
 	public class GUI extends JFrame
 	{
@@ -40,6 +47,12 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	        makeFrame();
 	        io = IO.getInstance();
 	        checkInp = new CheckInputs();
+	        Timer timer = new Timer(10, new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					enableButtons(buttons);
+				}
+			});
+	        timer.start();
 	    }
 	    
 	    private void makeFrame()
@@ -71,7 +84,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	                		statusLabel.setText("No festival set.");
 	                	} else {              	
 	                		addArtist();
-	                	}                    
+	                	}     
 	                }
 	            });        
 	        JButton addStage = new JButton("Add Stage");
@@ -96,7 +109,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	                { 
 	                	if(io.getFestival() == null){
 	                		statusLabel.setText("No festival set.");
-	                	} else {              	
+	                	} else if(io.getFestival().getArtists().isEmpty() || io.getFestival().getStages().isEmpty()){              	
+	                		statusLabel.setText("No stages or artists made.");
+	                	} else {
 	                		addPerformance();
 	                	}
 	                }
@@ -173,8 +188,6 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	        	addArtist, addPerformance, addStage, 
 	        	editArtist, editPerformance, editStage
 	        };
-	        // Alle knoppen
-	        disableButtons(buttons);
 	    }
 	    
 	    private void makeMenuBar()
@@ -475,20 +488,24 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 	    {
 	    	statusLabel.setText("executeSimulator();");
 	    }
-	    
-	    private void disableButtons(JButton[] buttons)
-	    {
-	    	for (JButton b : buttons)
-	    	{
-	    		b.setEnabled(false);
-	    	}
-	    }
-	    
+	
 	    private void enableButtons(JButton[] buttons)
 	    {
 	    	for (JButton b : buttons)
-	    	{
-	    		b.setEnabled(true);
-	    	}
+	    	{	
+	    		if(io.getFestival() == null){
+	    			b.setEnabled(false);
+	    		} else if((b.getText().contains("Performance")) && (io.getFestival().getArtists().isEmpty() || io.getFestival().getStages().isEmpty())){ 
+	    			b.setEnabled(false);
+            	} else if(b.getText().contains("Edit Artist") && io.getFestival().getArtists().isEmpty()){
+            		b.setEnabled(false);
+            	} else if(b.getText().contains("Edit Stage") && io.getFestival().getStages().isEmpty()) {
+            		b.setEnabled(false);
+            	} else if(b.getText().contains("Edit Performance") && io.getFestival().getPerformances().isEmpty()) {   
+            		b.setEnabled(false);
+            	} else {
+            		b.setEnabled(true);
+            	}
+            }
 	    }
 	}

@@ -1,3 +1,8 @@
+
+
+
+
+
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -10,6 +15,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+
 
 
 public class StagePanel{
@@ -59,7 +66,7 @@ public class StagePanel{
 		JButton delete = new JButton("Delete");
 		delete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				IO.getInstance().getFestival().getArtists().remove(stage);
+				IO.getInstance().getFestival().getStages().remove(stage);
 				frame.dispose();
 			}
 		});
