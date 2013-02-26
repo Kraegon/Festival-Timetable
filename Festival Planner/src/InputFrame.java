@@ -1,3 +1,8 @@
+
+
+
+
+
 import java.awt.Dimension;
 import java.awt.LayoutManager;
 import java.awt.Point;
@@ -5,6 +10,7 @@ import java.awt.Point;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
 
 import java.awt.*;
 import java.awt.event.*;
@@ -31,13 +37,13 @@ public class InputFrame{
 			StagePanel sPanel = new StagePanel();
 			frame.setContentPane(sPanel.makeStagePane(frame));
 			frame.setTitle("Add stage");
-			frame.setSize(new Dimension(250, 150));
+			frame.setSize(new Dimension(275, 150));
 			break;
 		case "performance":
 			PerformancePanel pPanel = new PerformancePanel();
 			frame.setContentPane(pPanel.makePerformancePane(frame));
 			frame.setTitle("Add performance");
-			frame.setSize(new Dimension(400,290));
+			frame.setSize(new Dimension(400,307));
 			break;
 		case "editArtist":
 			frame.setContentPane(makeSelector());
@@ -104,12 +110,12 @@ public class InputFrame{
 					case "editStage":
 						StagePanel sPanel = new StagePanel();
 						frame.setContentPane(sPanel.editStagePane(frame, list.getSelectedValue()));
-						frame.setSize(new Dimension(250, 150));
+						frame.setSize(new Dimension(275, 150));
 					break;
 					case "editPerformance":
 						PerformancePanel pPanel = new PerformancePanel();
 						frame.setContentPane(pPanel.editPerformancePane(frame, list.getSelectedValue()));
-						frame.setSize(new Dimension(400,290));
+						frame.setSize(new Dimension(400,307));
 					break;
 				}
 			}
