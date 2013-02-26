@@ -1,0 +1,116 @@
+import java.awt.LayoutManager;
+import java.awt.Point;
+
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.util.LinkedList;
+
+public class InputFrame extends JFrame{
+	
+	private static final long serialVersionUID = -1971482195672574230L;
+	String source;
+	
+	public InputFrame(String source, Point sourcePoint){
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);		
+		setLocation(new Point(sourcePoint.x + 150, sourcePoint.y + 150));
+		this.source = source;
+		switch(source){
+		case "artist":
+			ArtistPanel aPanel = new ArtistPanel();
+			setContentPane(aPanel.makeArtistPane(this));
+			setTitle("Add artist");
+			break;
+		case "stage":
+			StagePanel sPanel = new StagePanel();
+			setContentPane(sPanel.makeStagePane(this));
+			setTitle("Add stage");
+			break;
+		case "performance":
+			PerformancePanel pPanel = new PerformancePanel();
+			setContentPane(pPanel.makePerformancePane(this));
+			setTitle("Add performance");
+			break;
+		case "editArtist":
+			setContentPane(makeSelector());
+			setTitle("Edit artist");
+			break;
+		case "editStage":
+			setContentPane(makeSelector());
+			setTitle("Edit stage");
+			break;
+		case "editPerformance":
+			setContentPane(makeSelector());
+			setTitle("Edit performance");
+			break;
+		default:
+			setContentPane(makeErrorPane());
+			setTitle("Error");
+			break;
+		}
+		setVisible(true);
+	}
+	
+	
+	
+	
+	public JPanel makeErrorPane(){
+		JPanel errorPane = new JPanel(new BorderLayout());
+		errorPane.add(new JLabel("Something has gone horribly wrong."), BorderLayout.CENTER);
+		return errorPane;
+	}
+	public JPanel makeSelector(){
+		JPanel selectorPane = new JPanel(new BorderLayout());
+		selectorPane.add(new JLabel(""));
+		String[] names;
+		switch(source){
+		case "editArtist":
+			names = new String[IO.getInstance().getFestival().getArtists().size()];
+			for(int i = 0; i < names.length; i++){
+				names[i] = IO.getInstance().getFestival().getArtists().get(i).getName();
+			}
+			break;
+		case "editStage":
+			names = new String[IO.getInstance().getFestival().getStages().size()];
+			for(int i = 0; i < names.length; i++){
+				names[i] = IO.getInstance().getFestival().getStages().get(i).getName();
+			}
+			break;
+		case "editPerformance":
+			names = new String[IO.getInstance().getFestival().getPerformances().size()];
+			for(int i = 0; i < names.length; i++){
+				names[i] = IO.getInstance().getFestival().getPerformances().get(i).getName();
+			}
+			break;
+		default: names = new String[0];
+		}
+		final JList<String> list = new JList<String>(names);
+		list.setSelectedIndex(0);
+		JPanel okPane = new JPanel(new FlowLayout());
+		JButton ok = new JButton("OK");
+		ok.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				switch(source){
+					case "editArtist":
+						setContentPane(editArtistPane(list.getSelectedValue()));
+					break;
+					case "editStage":
+						setContentPane(editStagePane(list.getSelectedValue()));
+					break;
+					case "editPerformance":
+						setContentPane(editPerformancePane(list.getSelectedValue()));
+					break;
+				}
+			}
+		});
+		okPane.add(ok);
+		selectorPane.add(okPane, BorderLayout.SOUTH);
+		selectorPane.add(new JScrollPane(list), BorderLayout.CENTER);
+		setSize(new Dimension(200,500));
+		setResizable(true);
+		return selectorPane;
+	}
+}

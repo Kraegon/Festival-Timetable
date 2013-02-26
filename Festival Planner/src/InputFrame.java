@@ -17,7 +17,7 @@ public class InputFrame{
 	
 	public InputFrame(String source, Point sourcePoint){
 		this.frame = new JFrame("");
-		frame.setDefaultCloseOperation(frame.DISPOSE_ON_CLOSE);		
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);		
 		frame.setLocation(new Point(sourcePoint.x + 150, sourcePoint.y + 150));
 		this.source = source;
 		switch(source){
@@ -37,7 +37,7 @@ public class InputFrame{
 			PerformancePanel pPanel = new PerformancePanel();
 			frame.setContentPane(pPanel.makePerformancePane(frame));
 			frame.setTitle("Add performance");
-			frame.setSize(new Dimension(400,400));
+			frame.setSize(new Dimension(400,290));
 			break;
 		case "editArtist":
 			frame.setContentPane(makeSelector());
@@ -109,7 +109,7 @@ public class InputFrame{
 					case "editPerformance":
 						PerformancePanel pPanel = new PerformancePanel();
 						frame.setContentPane(pPanel.editPerformancePane(frame, list.getSelectedValue()));
-						frame.setSize(new Dimension(400,400));
+						frame.setSize(new Dimension(400,290));
 					break;
 				}
 			}
@@ -117,7 +117,7 @@ public class InputFrame{
 		okPane.add(ok);
 		selectorPane.add(okPane, BorderLayout.SOUTH);
 		selectorPane.add(new JScrollPane(list), BorderLayout.CENTER);
-		frame.setSize(new Dimension(200,500));
+		frame.setSize(new Dimension(200,250));
 		frame.setResizable(true);
 		return selectorPane;
 	}

@@ -1,0 +1,290 @@
+import java.awt.LayoutManager;
+import java.awt.Point;
+
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import java.awt.*;
+import java.awt.event.*;
+
+public class InputFrame extends JFrame{
+	
+	private static final long serialVersionUID = -1971482195672574230L;
+	String source;
+	JPanel artistPane;
+	JPanel stagePane;
+	JPanel performancePane;
+	JPanel festivalPane;
+	JPanel errorPane;
+	boolean i = false;
+	
+	public InputFrame(String source, Point sourcePoint){
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);		
+		setLocation(new Point(sourcePoint.x + 150, sourcePoint.y + 150));
+		this.source = source;
+		switch(source){
+		case "artist":
+			setContentPane(makeArtistPane());
+			setTitle("Add artist");
+			break;
+		case "stage":
+			setContentPane(makeStagePane());
+			setTitle("Add stage");
+			break;
+		case "performance":
+			setContentPane(makePerformancePane());
+			setTitle("Add performance");
+			break;
+		case "editArtist":
+			setContentPane(makeSelector());
+			setTitle("Edit artist");
+			break;
+		case "editStage":
+			setContentPane(makeSelector());
+			setTitle("Edit stage");
+			break;
+		case "editPerformance":
+			setContentPane(makeSelector());
+			setTitle("Edit performance");
+			break;
+		default:
+			setContentPane(errorPane);
+			setTitle("Error");
+			break;
+		}
+		setVisible(true);
+	}
+	
+	public JPanel makeArtistPane(){
+		//Creates itself and container
+		artistPane = new JPanel(new BorderLayout());
+		setSize(new Dimension(300,200));
+		final JComponent[] comps = new JComponent[]{
+				new JLabel("Name: "),new JLabel ("Genre: "),new JLabel ("Misc: "),
+				new JTextField("name"),	new JTextField("genre"), new JTextField("misc")
+		};
+		JPanel leftPane = new JPanel(new GridLayout(3,1));
+		JPanel rightPane = new JPanel(new GridLayout(3,1));
+		//Aesthetics
+		bePretty();
+		//Add ingredients to the soup
+		for(JComponent component : comps){
+			if(component.getClass() == JLabel.class){
+				leftPane.add(component);
+			} else {
+				rightPane.add(component);
+			}
+		}	
+		JPanel okPane = new JPanel(new FlowLayout());
+		JButton ok = new JButton("OK");
+		ok.addActionListener(new InputListener(this, comps, source));
+		okPane.add(ok);
+		artistPane.add(leftPane, BorderLayout.WEST);
+		artistPane.add(rightPane, BorderLayout.CENTER);
+		artistPane.add(okPane, BorderLayout.SOUTH);
+		setResizable(false);
+		return artistPane;
+	}
+	public JPanel editArtistPane(String targetArtist){
+		//Creates itself and container
+		artistPane = new JPanel(new BorderLayout());
+		setSize(new Dimension(300,200));
+		Artist artist = IO.getInstance().getFestival().findArtist(targetArtist);
+		final JComponent[] comps = new JComponent[]{
+				new JLabel("Name: "),new JLabel ("Genre: "),new JLabel ("Misc: "),
+				new JTextField(artist.getName()),	new JTextField(artist.getGenre()), new JTextField(artist.getMisc())
+		};
+		JPanel leftPane = new JPanel(new GridLayout(3,1));
+		JPanel rightPane = new JPanel(new GridLayout(3,1));
+		//Aesthetics
+		bePretty();
+		//Add ingredients to the soup
+		for(JComponent component : comps){
+			if(component.getClass() == JLabel.class){
+				leftPane.add(component);
+			} else {
+				rightPane.add(component);
+			}
+		}	
+		JPanel okPane = new JPanel(new FlowLayout());
+		JButton ok = new JButton("OK");
+		ok.addActionListener(new EditListener(this, comps, targetArtist));
+		okPane.add(ok);
+		artistPane.add(leftPane, BorderLayout.WEST);
+		artistPane.add(rightPane, BorderLayout.CENTER);
+		artistPane.add(okPane, BorderLayout.SOUTH);
+		setResizable(false);
+		return artistPane;
+	}
+	public JPanel makeStagePane() {
+		stagePane = new JPanel(new BorderLayout());
+		setSize(250, 150);
+		JComponent[] comps = new JComponent[]{
+			new JLabel("Name: "),
+			new JLabel("Max visitors: "),
+			new JTextField("Name"),
+			new JTextField("Maximum amount of visitors"),
+			new JCheckBox("Main stage?", i)
+		};
+		JButton stageButton = new JButton("Enter");
+		JPanel leftPanel = new JPanel(new GridLayout(2, 1));
+		JPanel rightPanel = new JPanel(new GridLayout(2, 1));
+		JPanel southPanel = new JPanel(new GridLayout(1, 2));
+
+		/*mainStage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				IO.getInstance().getFestival().getStages().get(0).toggleMainStage();
+			}
+		});*/
+
+		stageButton.addActionListener(new InputListener(this, comps, source));
+
+		leftPanel.add(comps[0]);
+		leftPanel.add(comps[1]);
+
+		rightPanel.add(comps[2]);
+		rightPanel.add(comps[3]);
+
+		southPanel.add(comps[4]);
+		southPanel.add(stageButton);
+
+		stagePane.add(leftPanel, BorderLayout.WEST);
+		stagePane.add(rightPanel, BorderLayout.CENTER);
+		stagePane.add(southPanel, BorderLayout.SOUTH);
+
+		setResizable(false);
+		return stagePane;
+	}
+	public JPanel makePerformancePane(){
+		performancePane = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		performancePane.add(new JLabel("Is performance!"));
+		return performancePane;
+	}	
+	public JPanel makeInputPane(){
+		performancePane = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		performancePane.add(new JLabel("Is input!"));
+		return performancePane;
+	}
+	public JPanel makeErrorPane(){
+		JPanel errorPane = new JPanel(new BorderLayout());
+		errorPane.add(new JLabel("Something has gone horribly wrong."), BorderLayout.CENTER);
+		return errorPane;
+	}
+	public JPanel makeSelector(){
+		JPanel selectorPane = new JPanel(new BorderLayout());
+		selectorPane.add(new JLabel(""));
+		String[] names;
+		switch(source){
+		case "editArtist":
+			names = new String[IO.getInstance().getFestival().getArtists().size()];
+			for(int i = 0; i < names.length; i++){
+				names[i] = IO.getInstance().getFestival().getArtists().get(i).getName();
+			}
+			break;
+		case "editStage":
+			names = new String[IO.getInstance().getFestival().getStages().size()];
+			for(int i = 0; i < names.length; i++){
+				names[i] = IO.getInstance().getFestival().getStages().get(i).getName();
+			}
+			break;
+		case "editPerformance":
+			names = new String[IO.getInstance().getFestival().getPerformances().size()];
+			for(int i = 0; i < names.length; i++){
+				names[i] = IO.getInstance().getFestival().getPerformances().get(i).getName();
+			}
+			break;
+		default: names = new String[0];
+		}
+		final JList<String> list = new JList<String>(names);
+		list.setSelectedIndex(0);
+		JPanel okPane = new JPanel(new FlowLayout());
+		JButton ok = new JButton("OK");
+		ok.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				editArtistPane(list.getSelectedValue());
+			}
+		});
+		okPane.add(ok);
+		selectorPane.add(okPane, BorderLayout.SOUTH);
+		selectorPane.add(new JScrollPane(list), BorderLayout.CENTER);
+		setSize(new Dimension(200,500));
+		setResizable(true);
+		return selectorPane;
+	}
+	public void bePretty(){
+		return;
+	}
+}
+class InputListener implements ActionListener{
+	private JFrame frame;
+	private JComponent[] comps;
+	private String target;
+	/**
+	 * Constructor for the InputListerener to 
+	 * @param frame : To be closed at the end of execution.
+	 * @param comps : Components to read out.
+	 */
+	public InputListener(JFrame frame, JComponent[] comps, String target){
+		this.frame = frame;
+		this.comps = comps;
+		this.target = target;
+	}
+	
+	public void actionPerformed(ActionEvent arg0) {
+		Object[] inputDetails = new Object[4];
+		int counter = 0;
+		for(int i = 0; i < comps.length; i++){
+			if(comps[i].getClass() == JTextField.class){
+				JTextField compTemp = (JTextField) comps[i];
+				inputDetails[counter] = compTemp.getText();
+				counter++;
+			} 
+			if(comps[i].getClass() == JCheckBox.class){
+				JCheckBox compTemp = (JCheckBox) comps[i];
+				inputDetails[counter] = compTemp.isEnabled();
+				counter++;
+			}
+		}
+		switch(target){
+			case "artist": IO.getInstance().getFestival().addArtist(new Artist((String) inputDetails[0],(String) inputDetails[1],(String) inputDetails[2]));
+				break;
+			case "stage": IO.getInstance().getFestival().addStage(new Stage((String) inputDetails[0],(int) inputDetails[1],(boolean) inputDetails[2]));
+				break;
+			case "performance": IO.getInstance().getFestival().addPerformance(new Performance((float) inputDetails[0], (float) inputDetails[1], (int) inputDetails[2], (Stage) inputDetails[3]));
+				break;
+		}
+		
+		frame.dispose();
+	}
+}
+class EditListener implements ActionListener{
+	private JFrame frame;
+	private JComponent[] comps;
+	private String targetArtist;
+	/**
+	 * Constructor for the InputListerener to 
+	 * @param frame : To be closed at the end of execution.
+	 * @param comps : Components to read out.
+	 */
+	public EditListener(JFrame frame, JComponent[] comps, String targetArtist){
+		this.frame = frame;
+		this.comps = comps;
+		this.targetArtist = targetArtist;
+	}
+	
+	public void actionPerformed(ActionEvent arg0) {
+		String[] artistDetails = new String[comps.length];
+		int counter = 0;
+		for(int i = 0; i < comps.length; i++){
+			if(comps[i].getClass() == JTextField.class){
+				JTextField compTemp = (JTextField) comps[i];
+				artistDetails[counter] = compTemp.getText();
+				counter++;
+			} 
+		}
+		Artist artist = IO.getInstance().getFestival().findArtist(targetArtist);
+		frame.dispose();
+	}
+	
+}

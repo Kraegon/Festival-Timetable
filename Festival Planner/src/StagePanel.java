@@ -1,5 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -43,9 +45,9 @@ public class StagePanel{
 
 		return stagePane;
 	}
-	public  JPanel editStagePane(JFrame frame, String targetStage) {
+	public  JPanel editStagePane(final JFrame frame, String targetStage) {
 		JPanel stagePane = new JPanel(new BorderLayout());
-		Stage stage = IO.getInstance().getFestival().findStage(targetStage);
+		final Stage stage = IO.getInstance().getFestival().findStage(targetStage);
 		JComponent[] comps = new JComponent[]{
 			new JLabel("Name: "),
 			new JLabel("Max visitors: "),
@@ -54,6 +56,13 @@ public class StagePanel{
 			new JCheckBox("Main stage?", stage.isMainStage())
 		};
 		JButton stageButton = new JButton("OK");
+		JButton delete = new JButton("Delete");
+		delete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				IO.getInstance().getFestival().getArtists().remove(stage);
+				frame.dispose();
+			}
+		});
 		JPanel leftPanel = new JPanel(new GridLayout(2, 1));
 		JPanel rightPanel = new JPanel(new GridLayout(2, 1));
 		JPanel southPanel = new JPanel(new GridLayout(1, 2));
@@ -68,6 +77,7 @@ public class StagePanel{
 
 		southPanel.add(comps[4]);
 		southPanel.add(stageButton);
+		southPanel.add(delete);
 
 		stagePane.add(leftPanel, BorderLayout.WEST);
 		stagePane.add(rightPanel, BorderLayout.CENTER);

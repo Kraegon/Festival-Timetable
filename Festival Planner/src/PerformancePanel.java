@@ -39,13 +39,13 @@ public class PerformancePanel{
 			public void actionPerformed(ActionEvent e) {
 				String element = artistQueue.getSelectedValue();
 				queueList.removeElement(element);
-				artistNames.removeElement(element);
+				artistNames.addElement(element);
 			}
 		});
 		JComponent[] comps = new JComponent[]{
-				new JLabel("Stages"),//0
-				new JLabel("Artists"),//1
-				new JLabel("Adding"),//2
+				new JLabel("Stages:"),//0
+				new JLabel("Artists:"),//1
+				new JLabel("Adding:"),//2
 				new JLabel("Start time: "),//3
 				new JLabel("End time: "),//4
 				new JLabel("Estimated popularity: "),//5
@@ -60,12 +60,17 @@ public class PerformancePanel{
 		JButton okButton = new JButton("OK");
 		okButton.addActionListener(new InputListener(frame, comps, "performance"));
 		
+		JPanel northPanel = new JPanel(new GridLayout(1,4));
 		JPanel leftPanel = new JPanel(new GridLayout(1,1));//Stage list
 		JPanel centerPanel = new JPanel(new BorderLayout());//Container for center panels
 		JPanel southPanel = new JPanel(new GridLayout(1, 2));//OK button
 		JPanel centerTopPanel = new JPanel(new GridLayout(1,3));//Artist list,buttons panel and Adding List
 		JPanel centerTopMiddlePanel = new JPanel(new GridLayout(2,1));
 		JPanel centerBottomPanel = new JPanel(new GridLayout(4,2));//Start time, end time and estimated popularity.
+		northPanel.add(comps[0]);
+		northPanel.add(comps[1]);
+		northPanel.add(new JLabel(""));
+		northPanel.add(comps[2]);
 		leftPanel.add(new JScrollPane(comps[11]));
 		leftPanel.setSize(new Dimension(100, 300));
 		southPanel.add(okButton);
@@ -86,15 +91,16 @@ public class PerformancePanel{
 		southPanel.add(okButton);
 		centerPanel.add(centerTopPanel, BorderLayout.NORTH);
 		centerPanel.add(centerBottomPanel, BorderLayout.SOUTH);
+		performancePane.add(northPanel, BorderLayout.NORTH);
 		performancePane.add(leftPanel, BorderLayout.WEST);
 		performancePane.add(centerPanel, BorderLayout.CENTER);
 		performancePane.add(southPanel, BorderLayout.SOUTH);
 		
 		return performancePane;
 	}	
-	public JPanel editPerformancePane(JFrame frame, String targetPerformance){
-		final JPanel performancePane = new JPanel(new BorderLayout());
-		Performance performance = IO.getInstance().getFestival().findPerformance(targetPerformance);
+	public JPanel editPerformancePane(final JFrame frame, String targetPerformance){
+		JPanel performancePane = new JPanel(new BorderLayout());
+		final Performance performance = IO.getInstance().getFestival().findPerformance(targetPerformance);
 		LinkedList<Stage> stages = IO.getInstance().getFestival().getStages();
 		String[] stageNames = new String[stages.size()];
 		for(int i = 0; i < stages.size(); i++){
@@ -127,7 +133,7 @@ public class PerformancePanel{
 			public void actionPerformed(ActionEvent e) {
 				String element = artistQueue.getSelectedValue();
 				queueList.removeElement(element);
-				artistNames.removeElement(element);
+				artistNames.addElement(element);
 			}
 		});
 		String startTime = "" + performance.getStartTime();
@@ -152,7 +158,13 @@ public class PerformancePanel{
 		okButton.addActionListener(new EditListener(frame, comps, performance));
 		
 		stageList.setSelectedValue(performance.getStage(), true);
-		
+		JButton delete = new JButton("Delete");
+		delete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				IO.getInstance().getFestival().getArtists().remove(performance);
+				frame.dispose();
+			}
+		});
 		JPanel leftPanel = new JPanel(new GridLayout(1,1));//Stage list
 		JPanel centerPanel = new JPanel(new BorderLayout());//Container for center panels
 		JPanel southPanel = new JPanel(new GridLayout(1, 2));//OK button
@@ -175,7 +187,7 @@ public class PerformancePanel{
 		centerBottomPanel.add(comps[9]);
 		centerBottomPanel.add(comps[5]);
 		centerBottomPanel.add(comps[10]);
-		
+		southPanel.add(delete);
 		southPanel.add(okButton);
 		centerPanel.add(centerTopPanel, BorderLayout.NORTH);
 		centerPanel.add(centerBottomPanel, BorderLayout.SOUTH);
