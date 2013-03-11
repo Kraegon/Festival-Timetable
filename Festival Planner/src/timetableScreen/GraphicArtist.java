@@ -1,4 +1,6 @@
 package timetableScreen;
+import gui.IO;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -73,7 +75,11 @@ public class GraphicArtist implements VisibleObject
 			p.draw(g);
 		}		
 	}
-
+	public boolean checkExists(){
+		if(IO.getInstance().getFestival().findArtist(artist.getName()) == null)
+			return false;
+		return true;
+	}
 	@Override
 	public void update(JPanel s)
 	{

@@ -1,4 +1,6 @@
 package timetableScreen;
+import gui.IO;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -59,7 +61,9 @@ public class GraphicBackdrop implements VisibleObject
 			//draw fucking image
 		}
 	}
-
+	public boolean checkExists(){
+		return true;
+	}
 	@Override
 	public void update(JPanel s)
 	{	

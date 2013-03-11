@@ -34,4 +34,6 @@
 <fullyQualifiedTypeName name="timetableScreen.GraphicArtist"/>
 <fullyQualifiedTypeName name="java.lang.System"/>
 <fullyQualifiedTypeName name="data.Artist"/>
+<fullyQualifiedTypeName name="gui.IO"/>
+<fullyQualifiedTypeName name="java.util.Iterator"/>
 </qualifiedTypeNameHistroy>

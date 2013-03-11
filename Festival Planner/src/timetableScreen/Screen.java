@@ -1,6 +1,7 @@
 package timetableScreen;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import javax.swing.JPanel;
@@ -54,6 +55,13 @@ public class Screen extends JPanel
 	public void paintComponent(Graphics g)
 	{
 		super.paintComponent(g);
+		Iterator<VisibleObject> m_List_Iterator = m_List.iterator();
+		while(m_List_Iterator.hasNext()){
+			VisibleObject o = m_List_Iterator.next();
+			if(!o.checkExists()){
+				m_List.remove(o);
+			}
+		}
 		
 		int minWidth = 0;		
 		for (int i = 0; i < m_List.size(); i ++)

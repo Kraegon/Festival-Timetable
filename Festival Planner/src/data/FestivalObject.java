@@ -5,7 +5,7 @@ package data;
  * @author Julian G. West
  *
  */
-public interface FestivalObject {
+public interface FestivalObject{
 	public String getName();
 	public String toString();
 }

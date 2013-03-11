@@ -1,10 +1,12 @@
 package timetableScreen;
 import gui.GUI;
+import gui.IO;
 
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.util.Iterator;
 
 import javax.swing.JPanel;
 
@@ -41,13 +43,16 @@ public class GraphicPerformance implements VisibleObject
 	{
 		this.performance = performance;
 		isMouseOver = false;
-		for(Artist a : performance.getArtists()){
-			m_Text += a.getName();
-			if(performance.getArtists().iterator().hasNext())
+		m_Text = "";
+		Iterator<Artist> i = performance.getArtists().iterator();
+		while(i.hasNext()){
+			m_Text += i.next().getName();
+			if(i.hasNext())
 				m_Text += " + ";
 		}
-		m_Time = new pTime(Integer.parseInt(performance.getStartTime().substring(0, 1)), Integer.parseInt(performance.getStartTime().substring(3, 4)));
-		m_Length = new pTime(Integer.parseInt(performance.getEndTime().substring(0, 1)), Integer.parseInt(performance.getEndTime().substring(3, 4)));
+		m_Time = new pTime(Integer.parseInt(performance.getStartTime().substring(0, 2)), Integer.parseInt(performance.getStartTime().substring(3, 5)));
+		m_Length = new pTime(Integer.parseInt(performance.getEndTime().substring(0, 2)) - m_Time.m_Hour, Integer.parseInt(performance.getEndTime().substring(3, 5)) - m_Time.m_Minute);
+
 		m_X = 100;
 		m_Y = 100;
 		m_Width = 100;
@@ -96,7 +101,7 @@ public class GraphicPerformance implements VisibleObject
 		dst.fillRect(m_X, m_Y, m_Width, m_Height);
 			//border
 		dst.setColor(Color.BLACK);
-		dst.drawRect(m_X+1, m_Y+1, m_Length.getPixels()-3, m_Height-3);
+		dst.drawRect(m_X+1, m_Y+1, m_Width-3, m_Height-3);
 		
 		//reset color
 		color = Color.RED;
@@ -123,7 +128,11 @@ public class GraphicPerformance implements VisibleObject
 		dst.drawString(_time, m_X + offset, m_Y + 30);
 		//dst.drawChars(m_Text.toCharArray(), 0, m_Text.length(), m_X + 10, m_Y + 10);
 	}
-
+	public boolean checkExists(){
+		if(IO.getInstance().getFestival().findPerformance(performance.getName()) == null)
+			return false;
+		return true;
+	}
 	@Override
 	public void update(JPanel s)
 	{

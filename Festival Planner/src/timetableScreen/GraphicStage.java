@@ -1,7 +1,10 @@
 package timetableScreen;
+import gui.IO;
+
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import javax.swing.JPanel;
@@ -82,10 +85,21 @@ public class GraphicStage implements VisibleObject
 			p.draw(g);
 		}		
 	}
-
+	public boolean checkExists(){
+		if(IO.getInstance().getFestival().findStage(stage.getName()) == null)
+			return false;
+		return true;
+	}
 	@Override
 	public void update(JPanel s)
 	{
+		Iterator<GraphicPerformance> it = m_List.iterator();
+		while(it.hasNext()){
+			GraphicPerformance p = it.next();
+			if(!p.checkExists()){
+				m_List.remove(p);
+			}
+		}
 		for (int i = 0; i < m_List.size(); i ++)
 		{
 			GraphicPerformance p = m_List.get(i);
