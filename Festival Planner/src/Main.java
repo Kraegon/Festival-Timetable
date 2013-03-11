@@ -1,8 +1,9 @@
+import gui.GUI;
+
 
 /**
  * Small main
- * @author Julian G. West
- * @author Lesley van Hoek 
+ * @author JTI1A6
  */
 
 public class Main{

@@ -1,0 +1,75 @@
+package timetableScreen;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.util.LinkedList;
+
+import javax.swing.JPanel;
+
+
+@SuppressWarnings("serial")
+public class Screen extends JPanel
+{
+	LinkedList<VisibleObject> m_List;
+	LinkedList<VisibleObject> m_ReDrawList;
+	
+	public Screen()
+	{
+		super();
+		m_List = new LinkedList<>();
+		m_ReDrawList = new LinkedList<>();
+	}
+	
+	public void addDrawable(VisibleObject o)
+	{
+		m_List.add(o);
+	}
+	
+	public void addReDraw(VisibleObject o)
+	{
+		m_ReDrawList.add(o);
+	}
+	
+	public void paintComponent(Graphics g)
+	{
+		super.paintComponent(g);
+		
+		int minWidth = 0;		
+		for (int i = 0; i < m_List.size(); i ++)
+		{
+			VisibleObject v = m_List.get(i);
+			if (v.getClass() == GraphicStage.class)
+			{
+				GraphicStage s = (GraphicStage) v;
+				int calcLength = s.getEstimatedWidth(); 
+				if (minWidth < calcLength) minWidth = calcLength;
+			}
+		}
+		minWidth = Math.max(627, minWidth + 300);
+		this.setPreferredSize(new Dimension(minWidth, 50 * m_List.size()));
+		
+		for (int i = 0; i < m_List.size(); i ++)
+		{
+			VisibleObject v = m_List.get(i);
+			if (v.getClass() == GraphicBackdrop.class)
+			{
+				GraphicBackdrop s = (GraphicBackdrop) v;
+				s.setLimit(Math.max(627, minWidth));
+			}
+			v.update(this);
+			v.draw(g);
+		}
+		
+		//double draw
+		for (int i = 0; i < m_ReDrawList.size(); i ++)
+		{
+			VisibleObject t = m_ReDrawList.get(i);
+			if (t.getClass() == GraphicPerformance.class)
+			{
+				GraphicPerformance gp = (GraphicPerformance) t;
+				gp.setWidth(true);
+			}
+			t.draw(g);
+		}
+		m_ReDrawList.clear();
+	}
+}
